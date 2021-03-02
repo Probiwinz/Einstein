@@ -35,7 +35,7 @@
 // TODO: menu and action to reboot Newton (in different configurations)
 // TODO: install essentials
 // TODO: drag'n'drop of multiple files and archives
-// TODO: drag'n'drop from network locations
+// TODO: drag'n'drop from network locations (https:, etc.)
 // TODO: drag'n'drop for the Unna Archive
 // TODO: option to load and save complete images including ROM, RAM, Flash, and PCMCIA memory snapshots
 // TODO: automated Internet access (install and setup)
@@ -57,7 +57,6 @@
 // TODO: Linux: App Icon, Flatpak
 
 // ----- Documentations
-// TODO: refine and test the BUILD.md build instructions
 // TODO: about panel must have all authors and references to the linked libraries (FLTK, ...)
 // TODO: release notes
 // TODO: help pages for use of Einstein, Monitor, etc.
@@ -69,12 +68,7 @@
 // ----- PCMCIA
 // TODO: keep cards in between reboots
 
-// ----- UI
-// TODO: 2020.4.10 on mac About screen shows no version number
-
 // ----- Ethernet Emulation
-// TODO: Sending an EMail: Communication Problem occured: Connection may have been dropped
-// TODO: Sylvian provides EMail Account for testing
 // TODO: NPDS not working: incomming TCP/IP connections don't work
 
 

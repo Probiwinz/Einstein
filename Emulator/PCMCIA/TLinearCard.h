@@ -30,6 +30,10 @@
 
 #include <stdio.h>
 
+#include <mutex>
+#include <thread>
+#include <vector>
+#include <future>
 
 ///
 /// Class for a linear flash memory card.
@@ -233,6 +237,19 @@ private:
     int mState = kReadArray;
 
     KUInt8 mStatusRegister = 0x80;
+
+	std::mutex mMutex;
+	std::promise<void>* mPageFlushPromise = nullptr;
+	std::future<void> mPageFlushFuture;
+	std::vector<bool> mPageDirty;
+
+	const int kPageSizeShift = 14; // 16kByte pages;
+	const int kPageSize = 1 << kPageSizeShift;
+
+	void MarkPageDirty(KUInt32 inAddress);
+	void FlushDirtyPages();
+	void FlushDirtyPagesLater();
+	void AbortFlushDirtyPages();
 };
 
 #endif
