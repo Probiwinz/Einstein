@@ -67,6 +67,32 @@ decl {\#include <FL/Fl_Native_File_Chooser.H>} {private local
 decl {\#include <FL/Fl.H>} {private local
 }
 
+Function {cb_keepInSlot0(Fl_Menu_Item* mi, void* user_data)} {open private return_type void
+} {
+  code {
+    if (mi->value()) {
+      mi->clear();
+      gApp->UserActionKeepPCCardInSlot(-1, (long)user_data);
+    } else {
+      mi->set();
+      gApp->UserActionKeepPCCardInSlot(0, (long)user_data);
+    }
+  } {}
+}
+
+Function {cb_keepInSlot1(Fl_Menu_Item* mi, void* user_data)} {open private return_type void
+} {
+  code {
+    if (mi->value()) {
+      mi->clear();
+      gApp->UserActionKeepPCCardInSlot(-1, (long)user_data);
+    } else {
+      mi->set();
+      gApp->UserActionKeepPCCardInSlot(1, (long)user_data);
+    }
+  } {}
+}
+
 Function {cb_changePCCard0(Fl_Widget*, void* user_data)} {open private return_type void
 } {
   code {gApp->UserActionPCCard(0, (long)user_data);} {}
@@ -82,8 +108,7 @@ class TFLSettingsUI {open : {public TFLSettings}
   Function {TFLSettingsUI()} {} {
     code {// create the setting dialog so we have it available for the user
 mSettingsPanel = CreateSettingsPanel();
-wAbout = nullptr;
-} {}
+wAbout = nullptr;} {}
   }
   Function {CreateSettingsPanel()} {
     comment override open
@@ -626,6 +651,21 @@ if (ix>0 && ix<=wPCCardList->size()) {
 }}
                 xywh {10 10 100 20} labelsize 12
               }
+              MenuItem wPCCardEditTag {
+                label {Edit Card Tag...}
+                callback {int ix = wPCCardList->value();
+if (ix>0 && ix<=wPCCardList->size()) {
+  TFLPCCardSettings *card = (TFLPCCardSettings*)wPCCardList->data(ix);
+  const char *oldTag = card->GetTag();
+  const char *newTag = fl_input(
+  	"Please enter a new Tag for you PCCard\\n\\n"
+  	"Tags should be at most four upper case\\n"
+  	"characters long.\\n", oldTag);
+  if (newTag)
+    card->SetTag(newTag);
+}}
+                xywh {20 20 100 20} labelsize 12
+              }
               MenuItem wPCCardEditPath {
                 label {Edit Card Image Path...}
                 callback {int ix = wPCCardList->value();
@@ -727,60 +767,75 @@ mSettingsPanel->hide();}
     code {\#define MENU_FONT FL_NORMAL_LABEL, FL_HELVETICA, 14, 0
 \#define MENU_HEADLINE FL_NORMAL_LABEL, FL_HELVETICA_BOLD_ITALIC, 14, 0
 
-  Fl_Menu_Item* slot0menu = (Fl_Menu_Item*)calloc(mCardList.size() + 5, sizeof(Fl_Menu_Item));
+  if (wNetworkTool) wNetworkTool->clearTopID();
+  if (wNetworkTool) wNetworkTool->clearBottomID();
+
+  Fl_Menu_Item* slot0menu = (Fl_Menu_Item*)calloc(mCardList.size() + 6, sizeof(Fl_Menu_Item));
   if (wPCCardSlot0->user_data()) ::free(wPCCardSlot0->user_data());
   wPCCardSlot0->flags |= FL_SUBMENU_POINTER;
   wPCCardSlot0->user_data(slot0menu);
-  slot0menu[0] = { "Eject Card", 0/* shortcut */, cb_changePCCard0, (void*)-1, FL_MENU_INVISIBLE | FL_MENU_DIVIDER, MENU_FONT };
-  slot0menu[1] = { "Insert Card:", 0/* shortcut */, nullptr /* callback */, nullptr /* user_data */, FL_MENU_INACTIVE, MENU_HEADLINE };
-  slot0menu[2] = { "Replace Card:", 0/* shortcut */, nullptr /* callback */, nullptr /* user_data */, FL_MENU_INVISIBLE | FL_MENU_INACTIVE, MENU_HEADLINE };
+  slot0menu[0] = { "Eject Card", 0/* shortcut */, cb_changePCCard0, (void*)-1, FL_MENU_INVISIBLE, MENU_FONT };
+  slot0menu[1] = { "Keep in Slot", 0/* shortcut */, (Fl_Callback*)cb_keepInSlot0, (void*)-1, FL_MENU_INVISIBLE | FL_MENU_TOGGLE | FL_MENU_DIVIDER, MENU_FONT };
+  slot0menu[2] = { "Insert Card:", 0/* shortcut */, nullptr /* callback */, nullptr /* user_data */, FL_MENU_INACTIVE, MENU_HEADLINE };
+  slot0menu[3] = { "Replace Card:", 0/* shortcut */, nullptr /* callback */, nullptr /* user_data */, FL_MENU_INVISIBLE | FL_MENU_INACTIVE, MENU_HEADLINE };
   TPlatformManager *pm = gApp->GetPlatformManager();
   TPCMCIACard *c0 = nullptr;
   if (pm) {
     c0 = gApp->GetPlatformManager()->GetPCCard(0);
     if (c0) {
       slot0menu[0].flags &= ~FL_MENU_INVISIBLE;
-      slot0menu[1].flags |= FL_MENU_INVISIBLE;
-      slot0menu[2].flags &= ~FL_MENU_INVISIBLE;
-    } else {
-      slot0menu[0].flags |= FL_MENU_INVISIBLE;
       slot0menu[1].flags &= ~FL_MENU_INVISIBLE;
       slot0menu[2].flags |= FL_MENU_INVISIBLE;
+      slot0menu[3].flags &= ~FL_MENU_INVISIBLE;
+    } else {
+      slot0menu[0].flags |= FL_MENU_INVISIBLE;
+      slot0menu[1].flags |= FL_MENU_INVISIBLE;
+      slot0menu[2].flags &= ~FL_MENU_INVISIBLE;
+      slot0menu[3].flags |= FL_MENU_INVISIBLE;
     }
   }
 
-  Fl_Menu_Item* slot1menu = (Fl_Menu_Item*)calloc(mCardList.size() + 5, sizeof(Fl_Menu_Item));
+  Fl_Menu_Item* slot1menu = (Fl_Menu_Item*)calloc(mCardList.size() + 6, sizeof(Fl_Menu_Item));
   if (wPCCardSlot1->user_data()) ::free(wPCCardSlot1->user_data());
   wPCCardSlot1->flags |= FL_SUBMENU_POINTER;
   wPCCardSlot1->user_data(slot1menu);
-  slot1menu[0] = { "Eject Card", 0/* shortcut */, cb_changePCCard1, (void*)-1, FL_MENU_INVISIBLE | FL_MENU_DIVIDER, MENU_FONT };
-  slot1menu[1] = { "Insert Card:", 0/* shortcut */, nullptr /* callback */, nullptr /* user_data */, FL_MENU_INACTIVE, MENU_HEADLINE };
-  slot1menu[2] = { "Replace Card:", 0/* shortcut */, nullptr /* callback */, nullptr /* user_data */, FL_MENU_INVISIBLE | FL_MENU_INACTIVE, MENU_HEADLINE };
+  slot1menu[0] = { "Eject Card", 0/* shortcut */, cb_changePCCard1, (void*)-1, FL_MENU_INVISIBLE, MENU_FONT };
+  slot1menu[1] = { "Keep in Slot", 0/* shortcut */, (Fl_Callback*)cb_keepInSlot1, (void*)-1, FL_MENU_INVISIBLE | FL_MENU_TOGGLE | FL_MENU_DIVIDER, MENU_FONT };
+  slot1menu[2] = { "Insert Card:", 0/* shortcut */, nullptr /* callback */, nullptr /* user_data */, FL_MENU_INACTIVE, MENU_HEADLINE };
+  slot1menu[3] = { "Replace Card:", 0/* shortcut */, nullptr /* callback */, nullptr /* user_data */, FL_MENU_INVISIBLE | FL_MENU_INACTIVE, MENU_HEADLINE };
   TPCMCIACard *c1 = nullptr;
   if (pm) {
     c1 = gApp->GetPlatformManager()->GetPCCard(1);
     if (c1) {
       slot1menu[0].flags &= ~FL_MENU_INVISIBLE;
-      slot1menu[1].flags |= FL_MENU_INVISIBLE;
-      slot1menu[2].flags &= ~FL_MENU_INVISIBLE;
-    } else {
-      slot1menu[0].flags |= FL_MENU_INVISIBLE;
       slot1menu[1].flags &= ~FL_MENU_INVISIBLE;
       slot1menu[2].flags |= FL_MENU_INVISIBLE;
+      slot1menu[3].flags &= ~FL_MENU_INVISIBLE;
+    } else {
+      slot1menu[0].flags |= FL_MENU_INVISIBLE;
+      slot1menu[1].flags |= FL_MENU_INVISIBLE;
+      slot1menu[2].flags &= ~FL_MENU_INVISIBLE;
+      slot1menu[3].flags |= FL_MENU_INVISIBLE;
     }
   }
 
   for (int i=0; i<mCardList.size(); i++) {
   	TFLPCCardSettings *card = mCardList[i];
-  	slot0menu[i+3] = { card->GetName(), 0, cb_changePCCard0, (void*)i, 0 /* flags */, MENU_FONT };
-  	slot1menu[i+3] = { card->GetName(), 0, cb_changePCCard1, (void*)i, 0 /* flags */, MENU_FONT };
+  	slot0menu[i+4] = { card->GetName(), 0, cb_changePCCard0, (void*)i, 0 /* flags */, MENU_FONT };
+  	slot1menu[i+4] = { card->GetName(), 0, cb_changePCCard1, (void*)i, 0 /* flags */, MENU_FONT };
     if (c0 && c0==card->Card()) {
-        slot0menu[i+3].labelfont_ |= 1;
-        slot1menu[i+3].flags |= FL_MENU_INACTIVE;
+        slot0menu[i+4].labelfont_ |= 1;
+        slot1menu[i+4].flags |= FL_MENU_INACTIVE;
+        if (card->KeepInSlot()==0) slot0menu[1].set();
+        if (wNetworkTool) wNetworkTool->setTopID(card->GetTag());
+        slot0menu[1].user_data((void*)i);
     }
     if (c1 && c1==card->Card()) {
-        slot1menu[i+3].labelfont_ |= 1;
-        slot0menu[i+3].flags |= FL_MENU_INACTIVE;
+        slot1menu[i+4].labelfont_ |= 1;
+        slot0menu[i+4].flags |= FL_MENU_INACTIVE;
+        if (card->KeepInSlot()==1) slot1menu[1].set();
+        if (wNetworkTool) wNetworkTool->setBottomID(card->GetTag());
+        slot1menu[1].user_data((void*)i);
     }
   }} {}
   }

@@ -12,6 +12,27 @@ decl {\#include <FL/fl_draw.H>} {private global
 decl {\#include "TFLAppWindow.h"} {public global
 }
 
+decl {\#include "TFLTabs.h"} {public global
+}
+
+data imgPCCardTopIn {public local filename {../Resources/icons/button_pccard_top_in.png}
+}
+
+data imgPCCardTopOut {public local filename {../Resources/icons/button_pccard_top_out.png}
+}
+
+data imgPCCardTopHilite {public local filename {../Resources/icons/button_pccard_top_hilight.png}
+}
+
+data imgPCCardBotIn {public local filename {../Resources/icons/button_pccard_bottom_in.png}
+}
+
+data imgPCCardBotOut {public local filename {../Resources/icons/button_pccard_bottom_out.png}
+}
+
+data imgPCCardBotHilite {public local filename {../Resources/icons/button_pccard_bottom_hilight.png}
+}
+
 Function {CreateApplicationWindow(int x, int y)} {open
 } {
   Fl_Window wAppWindow {open
@@ -209,7 +230,7 @@ Function {CreateApplicationWindow(int x, int y)} {open
         image {../Resources/icons/button_backlight_on.png} xywh {192 34 14 15} hide
       }
       Fl_Button wNetworkTool {
-        label PCCards
+        label {PCCards  }
         callback {float y = (Fl::event_y()-o->y())/(float)o->h();
   Fl_Menu_Item* menu = nullptr;
   const Fl_Menu_Item* cardMenu = nullptr;
@@ -218,18 +239,20 @@ Function {CreateApplicationWindow(int x, int y)} {open
       if (menu)
         cardMenu = menu->popup(Fl::event_x(), Fl::event_y(), "PCPort 0");
       if (cardMenu)
-      	gApp->UserActionPCCard(0, (long)cardMenu->user_data());
+        cardMenu->callback()((Fl_Widget*)cardMenu, cardMenu->user_data());
   } else {
       menu = (Fl_Menu_Item*)wPCCardSlot1->user_data();
       if (menu)
         cardMenu = menu->popup(Fl::event_x(), Fl::event_y(), "PCPort 1");
       if (cardMenu)
-      	gApp->UserActionPCCard(1, (long)cardMenu->user_data());
+        cardMenu->callback()((Fl_Widget*)cardMenu, cardMenu->user_data());
   }} selected
-        image {../Resources/icons/button_network.png} xywh {104 25 36 36} color 52 labelsize 11 align 514
+        xywh {100 25 60 36} color 52 labelsize 11 align 578
         code0 {o->box(FL_FREE_BOXTYPE);}
         code1 {o->down_box(FL_FREE_BOXTYPE);}
         code2 {o->clear_visible_focus();}
+        code3 {o->images(imgPCCardTopIn, imgPCCardTopOut, imgPCCardTopHilite, imgPCCardBotIn, imgPCCardBotOut, imgPCCardBotHilite);}
+        class TFLPCMCIAButton
       }
       Fl_Button wNetworkOnTool {
         image {../Resources/icons/button_network_in.png} xywh {196 39 14 15} hide

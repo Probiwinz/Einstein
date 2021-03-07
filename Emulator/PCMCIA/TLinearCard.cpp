@@ -29,6 +29,8 @@
 #include "Emulator/Log/TLog.h"
 #include "Emulator/PCMCIA/TPCMCIAController.h"
 
+#include <K/Trace.h>
+
 #if TARGET_OS_WIN32
 # include <Winsock2.h>
 #else
@@ -36,6 +38,15 @@
 #endif
 
 #include <errno.h>
+
+#include <future>
+#include <chrono>
+#include <thread>
+using namespace std::chrono_literals;
+
+#define AsyncTrace /##/
+//#define AsyncTrace ::KTrace
+
 
 // -------------------------------------------------------------------------- //
 // Constantes
@@ -104,6 +115,8 @@ TLinearCard::~TLinearCard( void )
 // -------------------------------------------------------------------------- //
 int TLinearCard::Init(TPCMCIAController* inController)
 {
+    std::lock_guard<std::mutex> guard(mMutex);
+
     int ret = super::Init(inController);
     if (ret == -1)
         return ret;
@@ -142,6 +155,8 @@ int TLinearCard::Init(TPCMCIAController* inController)
     ::fclose(mFile);
     mFile = nullptr;
 
+    mPageDirty.resize(mSize / kPageSize, false);
+
     return 0;
 }
 
@@ -151,7 +166,15 @@ int TLinearCard::Init(TPCMCIAController* inController)
 void
 TLinearCard::Remove()
 {
+    AbortFlushDirtyPages();
+
+#if 1 // If there are no bugs, this will work
+    FlushDirtyPages();
+#else // If you want to be really really sure.
     Flush();
+#endif
+
+    std::lock_guard<std::mutex> guard(mMutex);
 
     if (mFile) {
         ::fclose(mFile);
@@ -181,6 +204,8 @@ TLinearCard::Remove()
 void
 TLinearCard::Flush()
 {
+    std::lock_guard<std::mutex> guard(mMutex);
+
     // Check if there is any data that we might want to write 
     if (mFilePath && mMemoryMap && mSize) {
         // Open the file for reading, writing, and updating.
@@ -194,10 +219,9 @@ TLinearCard::Flush()
         }
         // Keep the file open for possible additional calls to Flush(). 
         // Destructor will close the file for us later.
-        // TODO: we should only write those blocks that were actually modified to save time
-        // TODO: we should write dirty blocks on a regular base, not just when closing the file 
-        //      that will ensure that Flash cards are saved, even if Einstein crashes
     }
+
+    mPageDirty.assign(mPageDirty.size(), false);
 }
 
 // -------------------------------------------------------------------------- //
@@ -444,6 +468,7 @@ TLinearCard::WriteMem( KUInt32 inOffset, KUInt32 inValue )
             mMemoryMap[inOffset+0] = (KUInt8)(inValue>>24);
             mMemoryMap[inOffset+1] = (KUInt8)(inValue>>16);
         }
+        MarkPageDirty(inOffset);
         mState = kReadStatusRegister;
     } else if (mState==kEraseSetup) {
         if (inValue==0xd0d00000) {
@@ -454,6 +479,9 @@ TLinearCard::WriteMem( KUInt32 inOffset, KUInt32 inValue )
                 mMemoryMap[addr+1] = 0xFF;
                 mMemoryMap[addr+2] = 0xFF;
                 mMemoryMap[addr+3] = 0xFF;
+            }
+            for (KUInt32 page = start; page < end; page += kPageSize) {
+                MarkPageDirty(page);
             }
             mStatusRegister = 0x80;
         } else {
@@ -507,6 +535,7 @@ TLinearCard::WriteMemB( KUInt32 inOffset, KUInt8 inValue )
         } else {
             mMemoryMap[inOffset] = inValue;
         }
+        MarkPageDirty(inOffset);
         mState = kReadStatusRegister;
     } else if (mState==kEraseSetup) {
         if (inValue==0xd0) {
@@ -521,6 +550,9 @@ TLinearCard::WriteMemB( KUInt32 inOffset, KUInt8 inValue )
                     mMemoryMap[addr+0] = 0xFF;
                     mMemoryMap[addr+2] = 0xFF;
                 }
+            }
+            for (KUInt32 page = start; page < end; page += kPageSize) {
+                MarkPageDirty(page);
             }
             mStatusRegister = 0x80;
         } else {
@@ -769,6 +801,117 @@ int TLinearCard::ImageInfo::write(FILE* f)
     int ret = fwrite(this, sizeof(ImageInfo), 1, f);
     flipByteOrder();
     return ret;
+}
+
+/*
+ TLinearCard has a system that ensures that the contents of the PCMCIA
+ image in memory stays in sync with the disk image.
+
+ A bit in the mPageDirty bit array is reserved for every 16kB block
+ of flash memory. If there is a memory write operation anywhere on
+ a page, that page is marked "dirty", and a process is launched that 
+ will write all pages marked dirty to disk 2 seconds later.
+
+ So unless Einstein crashes within those two seconds, the content of the
+ memory and file will stay in sync without creating unneccessary write
+ operations.
+
+ In the actual emulation, these does not seem to be a huge problem. Apple
+ was very aware that Flash memeory has a limited life span, and instead of 
+ writing all changes to a PC Card immediatly, NewtonOS seems to have its
+ own little 5 second cache delay, writing only as much data as necessary,
+ and limiting lengthy (and damaging) erase processes to an absolute minimum.
+
+ The code below was tested and seems to be working well. More extensive 
+ testing, maybe even a unit test, would be nice.
+ */
+
+
+void TLinearCard::MarkPageDirty(KUInt32 inAddress)
+{
+    std::lock_guard<std::mutex> guard(mMutex);
+    mPageDirty[inAddress >> kPageSizeShift] = true;
+    if (!mPageFlushPromise) {
+        FlushDirtyPagesLater();
+    }
+}
+
+
+void TLinearCard::FlushDirtyPages()
+{
+    std::lock_guard<std::mutex> guard(mMutex);
+
+    int nFlushed = 0;
+
+    // Check if there is any data that we might want to write 
+    if (mFilePath && mMemoryMap && mSize) {
+        // Open the file for reading, writing, and updating.
+        if (!mFile)
+            mFile = fopen(mFilePath, "r+b");
+        // If the file could be opened, write the entire memeory chunk to the file.
+        if (mFile) {
+            for (KUInt32 i = 0; i < mPageDirty.size(); i++) {
+                if (mPageDirty[i]) {
+                    KUInt32 offset = i * kPageSize;
+                    ::fseek(mFile, mImageInfo.pDataStart + offset, SEEK_SET);
+                    ::fwrite(mMemoryMap+offset, kPageSize, 1, mFile);
+                    mPageDirty[i] = false;
+                    nFlushed++;
+                }
+            }
+            if (nFlushed)
+                ::fflush(mFile);
+        }
+        // Keep the file open for possible additional calls to Flush(). 
+        // Destructor will close the file for us later.
+    }
+    AsyncTrace("FlushDirtyPages wrote %d pages to disk\n", nFlushed);
+}
+
+void TLinearCard::FlushDirtyPagesLater()
+{
+    // this method must be called with mMutex locked!
+    AsyncTrace("FlushDirtyPagesLater:Start\n");
+    if (!mPageFlushPromise) {
+        mPageFlushPromise = new std::promise<void>;
+        auto future = std::shared_future<void>(mPageFlushPromise->get_future());
+        mPageFlushFuture = std::async(std::launch::async, [this, future]()->void {
+            AsyncTrace("  FlushDirtyPagesLater:THREAD Start\n");
+            auto status = future.wait_for(2s);
+            if (status == std::future_status::timeout) {
+                AsyncTrace("  FlushDirtyPagesLater:THREAD Timeout\n");
+                AsyncTrace("  FlushDirtyPagesLater:THREAD Flushing\n");
+                FlushDirtyPages();
+                AsyncTrace("  FlushDirtyPagesLater:THREAD Flushing Done\n");
+            } else if (status == std::future_status::ready) {
+                AsyncTrace("  FlushDirtyPagesLater:THREAD Aborted\n");
+            }
+            mMutex.lock();
+            delete mPageFlushPromise;
+            mPageFlushPromise = nullptr;
+            mMutex.unlock();
+        });
+    } else {
+        AsyncTrace("FlushDirtyPagesLater:Abort\n");
+    }
+    AsyncTrace("FlushDirtyPagesLater:End\n");
+}
+
+void TLinearCard::AbortFlushDirtyPages()
+{
+    AsyncTrace("AbortFlushDirtyPages:Start\n");
+    mMutex.lock();
+    if (mPageFlushPromise) {
+        AsyncTrace("AbortFlushDirtyPages:Abort\n");
+        mPageFlushPromise->set_value();
+        mMutex.unlock();
+        AsyncTrace("AbortFlushDirtyPages:Join\n");
+        mPageFlushFuture.wait();
+        AsyncTrace("AbortFlushDirtyPages:Aborted\n");
+    } else {
+        mMutex.unlock();
+    }
+    AsyncTrace("AbortFlushDirtyPages:End\n");
 }
 
 

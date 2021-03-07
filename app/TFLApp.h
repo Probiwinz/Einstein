@@ -123,6 +123,9 @@ public:
     // User wants to insert or remove PCMCIA card into ot from controller 0.
     int UserActionPCCard(int inSlot, long inIndex);
 
+    // User wants to keep this card in the PCCard slot during reboots
+    int UserActionKeepPCCardInSlot(int inSlot, int inIndex);
+
     // ---  Events from within the emulator
 
     // this is called by the screen manager when the state of the backlight changed
@@ -160,6 +163,8 @@ private:
     void InitPCMCIACardList();
 
     void InitMonitor(const char *theROMImagePath);
+
+    void MountPCCardsKeptInSlot();
 
     // create the driver for our screen output
 	void CreateScreenManager(

@@ -35,7 +35,7 @@
 // TODO: menu and action to reboot Newton (in different configurations)
 // TODO: install essentials
 // TODO: drag'n'drop of multiple files and archives
-// TODO: drag'n'drop from network locations
+// TODO: drag'n'drop from network locations (https:, etc.)
 // TODO: drag'n'drop for the Unna Archive
 // TODO: option to load and save complete images including ROM, RAM, Flash, and PCMCIA memory snapshots
 // TODO: automated Internet access (install and setup)
@@ -57,7 +57,6 @@
 // TODO: Linux: App Icon, Flatpak
 
 // ----- Documentations
-// TODO: refine and test the BUILD.md build instructions
 // TODO: about panel must have all authors and references to the linked libraries (FLTK, ...)
 // TODO: release notes
 // TODO: help pages for use of Einstein, Monitor, etc.
@@ -69,14 +68,80 @@
 // ----- PCMCIA
 // TODO: keep cards in between reboots
 
-// ----- UI
-// TODO: 2020.4.10 on mac About screen shows no version number
-
 // ----- Ethernet Emulation
-// TODO: Sending an EMail: Communication Problem occured: Connection may have been dropped
-// TODO: Sylvian provides EMail Account for testing
 // TODO: NPDS not working: incomming TCP/IP connections don't work
 
+/*
+
+Documentation:
+
+User's Manual: Title, Introduction and Purpose, Setup guide, Use Guide for all features, Appendices (Resources, Licenses, Contact Information)
+ - it's not a nove, users want to get started quickly
+ - what is the purpose of this manual
+ - don't leave out even 'obvious' steps when explaining something blow by blow
+ - who's the audience? What do they want to achieve? User may not have previous knowledge.
+ - collect all information that you want to write down
+ - structure the colection, create categories by what users may be trying to find
+ - write the content, focus on the goal, help the user solve his issue
+ - use numbered lists
+ - add structure aith the Table of Contents
+ - add graphics, screenshots, and even video (explaining stuff in words isboring)
+
+ Title
+  - app name, copyright, authors, linked software and their licenses
+ Introduction
+  - One short paragraph about the MessagePad/eMate300
+  - What is an emulator
+  - What does Einstein emulate (and what is lacking)
+  - Supported Platforms
+ First launch
+  - What is a ROM and where to get it 
+  - What is Flash, and how do I set it up
+  - How much system RAM to choose
+  - Launching an quitting the meulator
+ Essential Apps
+  - the Y10k patch
+  - built-in NewtTest
+ How to use the main screen 
+  - resizing and fullscreen vs. changing resolution
+  - copy and paste
+  - drag and drop
+  - installing apps from disk and internet
+  - menus
+ How to sync over the 'serial' line
+  - (built-in Einstein Prefs)
+  - the Dock and its counterparts on various platforms (does this warrant its own chapter?)
+ Networking setup
+  - install apps with direct links
+  - what to enter in the dialogs
+  - browser, eMail, Network Dock
+ PCMCIA Card Setup
+  - how to create new cards
+  - how to use card images
+  - how to save and backup cards
+  - how to dump physical crads int a card image
+ Configuring multiple MessagePads and eMates
+  - detailed settings for a new machine
+  - detailed settings for a hardware
+  - how to launch a different machine setup
+ Toolkit overview
+  - loading and launching sample apps
+ Monitor overview
+  - breaking into machine code
+  - single stepping
+  - looking at ram and registers
+  - continue execution
+ Appendices 
+  - more Resources
+  - Licenses
+  - Contact Information
+
+
+
+Developer's Documentation: Basic Ideas, Basic Features, Detailed Class Reference (Doxygen)
+
+
+*/
 
 /*
  Einstein threads:
@@ -306,13 +371,16 @@ TFLApp::Run( int argc, char* argv[] )
     if (mMonitor)
         mMonitor->RunOnStartup(true);
 
+    MountPCCardsKeptInSlot();
+
     Fl::lock();
     wAppWindow->show(1, argv);
     StoreAppWindowSize();
     if (hidemouse) {
         wAppWindow->HideMousePointer();
     }
-/*
+
+    /*
     GetPlatformManager()->SendFlashMemoryCardEvent();
     mMonitor->Show();
     mMonitor->Stop();
@@ -660,6 +728,13 @@ int TFLApp::UserActionPCCard(int inSlot, long inIndex)
     return ret;
 }
 
+// User wants to keep this card in the PCCard slot during reboots
+int TFLApp::UserActionKeepPCCardInSlot(int inSlot, int inIndex)
+{
+    mFLSettings->KeepPCCardInSlot(inSlot, inIndex);
+    return 0;
+}
+
 
 //void TFLApp::UserActionAddPCMCIAImage(const char* inImageFilename, const char* inName)
 //{
@@ -871,15 +946,21 @@ void TFLApp::InitSerialPorts()
 #endif
 }
 
+void TFLApp::MountPCCardsKeptInSlot()
+{
+    int c0 = mFLSettings->GetCardKeptInSlot(0);
+    if (c0 != -1)
+        UserActionPCCard(0, c0);
+    int c1 = mFLSettings->GetCardKeptInSlot(1);
+    if (c1 != -1)
+        UserActionPCCard(1, c1);
+}
+
 
 void TFLApp::InitPCMCIACardList()
 {
     mPCMCIACardList = new TPCMCIACardList(nullptr, nullptr);
     mPCMCIACardList->addDefaultCards();
-    //mPCMCIACardList->addMemoryCard(
-    //    "C:/Users/micro/Downloads/MP2000-PCMCIA-Image_S.PILET/MP2000-PCMCIA-Image_S.PILET/Fodor94"
-    //    "C:/Users/micro/Downloads/MP2000-PCMCIA-Image_S.PILET/MP2000-PCMCIA-Image_S.PILET/Fodor94-CIS"
-    //    );
 }
 
 
