@@ -15,7 +15,7 @@ decl {\#include "TFLAppWindow.h"} {public global
 decl {\#include "TFLTabs.h"} {public global
 }
 
-data imgPCCardTopIn {public local filename {../Resources/icons/button_pccard_top_in.png}
+data imgPCCardTopIn {selected public local filename {../Resources/icons/button_pccard_top_in.png}
 }
 
 data imgPCCardTopOut {public local filename {../Resources/icons/button_pccard_top_out.png}
@@ -246,7 +246,7 @@ Function {CreateApplicationWindow(int x, int y)} {open
         cardMenu = menu->popup(Fl::event_x(), Fl::event_y(), "PCPort 1");
       if (cardMenu)
         cardMenu->callback()((Fl_Widget*)cardMenu, cardMenu->user_data());
-  }} selected
+  }}
         xywh {100 25 60 36} color 52 labelsize 11 align 578
         code0 {o->box(FL_FREE_BOXTYPE);}
         code1 {o->down_box(FL_FREE_BOXTYPE);}

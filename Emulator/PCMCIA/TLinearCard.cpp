@@ -44,7 +44,7 @@
 #include <thread>
 using namespace std::chrono_literals;
 
-#define AsyncTrace /##/
+#define AsyncTrace(...)
 //#define AsyncTrace ::KTrace
 
 
