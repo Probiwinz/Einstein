@@ -27,7 +27,13 @@
 
 // ----- User Interface improvements
 // TODO: option to launch Monitor stopped at boot point
+//       Note: the Monitor logging, locking and event mechanism is pretty broken
+//       Log messages should be displayed and scroll as they come in
+//       Quitting the emulator while the Monitor is visible will lock the app
+//       Monitor does not switch to the Log-only screen when running
+//       Monitor does not show the assembler commands as we step through them
 // TODO: make FKey Bar for eMate emulation with volume slider (screenshot)
+// TODO: make main menu and toolbar optional
 // TODO: is the drop-down menu still on par?
 // TODO: allow skeuomorphism (use photo of MP as an outline in the UI)
 
@@ -54,7 +60,7 @@
 // TODO: Full Android support as an address book and calender app
 // TODO: Fix locks and race conditions
 // TODO: cleanup all compile warnings on all platforms
-// TODO: Linux: App Icon, Flatpak
+// TODO: Linux: App Icon, Flatpak?
 
 // ----- Documentations
 // TODO: about panel must have all authors and references to the linked libraries (FLTK, ...)
@@ -64,9 +70,6 @@
 
 // ----- Flash Memeory Settings
 // TODO: even if internal Flash is set to 4MB, it reports 8MB in sum. Also, we can't allocate more than 4MB in settings without crash. Original Einstein works.
-
-// ----- PCMCIA
-// TODO: keep cards in between reboots
 
 // ----- Ethernet Emulation
 // TODO: NPDS not working: incomming TCP/IP connections don't work
