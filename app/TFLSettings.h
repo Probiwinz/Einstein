@@ -80,12 +80,17 @@ public:
 
     const char* GetImagePath() { return mImagePath; }
 
+    int KeepInSlot() { return mKeepInSlot; }
+
+    void KeepInSlot(int i) { mKeepInSlot = i; }
+
 private:
     TPCMCIACard* mCard = nullptr;
     char *mUUID = nullptr;
     char *mName = nullptr;
     char* mImagePath = nullptr;
     char* mTag = nullptr;
+    int mKeepInSlot = -1;
     CardType mType = CardType::kUndefined;
 };
 
@@ -116,6 +121,10 @@ public:
     void endUpdateCardList();
 
     void UnplugPCCard(int ix);
+    void KeepPCCardInSlot(int inSlot, int inCard);
+
+    int CardToIndex(TPCMCIACard* inCard);
+    int GetCardKeptInSlot(int inSlot);
 
 //protected:
     Fl_Double_Window *mSettingsPanel = nullptr;

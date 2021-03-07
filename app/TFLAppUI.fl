@@ -239,13 +239,13 @@ Function {CreateApplicationWindow(int x, int y)} {open
       if (menu)
         cardMenu = menu->popup(Fl::event_x(), Fl::event_y(), "PCPort 0");
       if (cardMenu)
-      	gApp->UserActionPCCard(0, (long)cardMenu->user_data());
+        cardMenu->callback()((Fl_Widget*)cardMenu, cardMenu->user_data());
   } else {
       menu = (Fl_Menu_Item*)wPCCardSlot1->user_data();
       if (menu)
         cardMenu = menu->popup(Fl::event_x(), Fl::event_y(), "PCPort 1");
       if (cardMenu)
-      	gApp->UserActionPCCard(1, (long)cardMenu->user_data());
+        cardMenu->callback()((Fl_Widget*)cardMenu, cardMenu->user_data());
   }} selected
         xywh {100 25 60 36} color 52 labelsize 11 align 578
         code0 {o->box(FL_FREE_BOXTYPE);}

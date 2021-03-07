@@ -371,13 +371,16 @@ TFLApp::Run( int argc, char* argv[] )
     if (mMonitor)
         mMonitor->RunOnStartup(true);
 
+    MountPCCardsKeptInSlot();
+
     Fl::lock();
     wAppWindow->show(1, argv);
     StoreAppWindowSize();
     if (hidemouse) {
         wAppWindow->HideMousePointer();
     }
-/*
+
+    /*
     GetPlatformManager()->SendFlashMemoryCardEvent();
     mMonitor->Show();
     mMonitor->Stop();
@@ -725,6 +728,13 @@ int TFLApp::UserActionPCCard(int inSlot, long inIndex)
     return ret;
 }
 
+// User wants to keep this card in the PCCard slot during reboots
+int TFLApp::UserActionKeepPCCardInSlot(int inSlot, int inIndex)
+{
+    mFLSettings->KeepPCCardInSlot(inSlot, inIndex);
+    return 0;
+}
+
 
 //void TFLApp::UserActionAddPCMCIAImage(const char* inImageFilename, const char* inName)
 //{
@@ -936,15 +946,21 @@ void TFLApp::InitSerialPorts()
 #endif
 }
 
+void TFLApp::MountPCCardsKeptInSlot()
+{
+    int c0 = mFLSettings->GetCardKeptInSlot(0);
+    if (c0 != -1)
+        UserActionPCCard(0, c0);
+    int c1 = mFLSettings->GetCardKeptInSlot(1);
+    if (c1 != -1)
+        UserActionPCCard(1, c1);
+}
+
 
 void TFLApp::InitPCMCIACardList()
 {
     mPCMCIACardList = new TPCMCIACardList(nullptr, nullptr);
     mPCMCIACardList->addDefaultCards();
-    //mPCMCIACardList->addMemoryCard(
-    //    "C:/Users/micro/Downloads/MP2000-PCMCIA-Image_S.PILET/MP2000-PCMCIA-Image_S.PILET/Fodor94"
-    //    "C:/Users/micro/Downloads/MP2000-PCMCIA-Image_S.PILET/MP2000-PCMCIA-Image_S.PILET/Fodor94-CIS"
-    //    );
 }
 
 

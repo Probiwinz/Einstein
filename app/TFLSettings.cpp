@@ -73,6 +73,7 @@ TFLPCCardSettings::TFLPCCardSettings(Fl_Preferences &prefs)
     char newTag[32];
     prefs.get("tag", newTag, "", 30);
     if (newTag[0]) SetTag(newTag);
+    prefs.get("keepInSlot", mKeepInSlot, -1);
 }
 
 
@@ -138,6 +139,7 @@ void TFLPCCardSettings::WritePrefs(Fl_Preferences &prefs)
 {
     prefs.set("name", mName);
     prefs.set("tag", mTag);
+    prefs.set("keepInSlot", mKeepInSlot);
     switch (mType) {
     case CardType::kUndefined:
         prefs.set("type", 0);
@@ -462,3 +464,49 @@ void TFLSettings::UnplugPCCard(int ix)
     // FIXME: write this
 }
 
+
+/*
+* inSlot can be 0 or 1 for the corresponding slot, or -1 if the card must no longer be in any slot
+*/
+void TFLSettings::KeepPCCardInSlot(int inSlot, int inCard)
+{
+    bool clearIf0 = (inSlot==0);
+    bool clearIf1 = (inSlot==1);
+
+    for (int ix = 0; ix < mCardList.size(); ++ix) {
+        TFLPCCardSettings* card = mCardList[ix];
+        if (ix == inCard) {
+            card->KeepInSlot(inSlot);
+        } else {
+            if (clearIf0 && card->KeepInSlot() == 0)
+                card->KeepInSlot(-1);
+            if (clearIf1 && card->KeepInSlot() == 1)
+                card->KeepInSlot(-1);
+        }
+    }
+
+    savePreferences();
+}
+
+int TFLSettings::CardToIndex(TPCMCIACard* inCard)
+{
+    if (!inCard)
+        return -1;
+    for (int ix = 0; ix < mCardList.size(); ++ix) {
+        TPCMCIACard* card = mCardList[ix]->Card();
+        if (card == inCard)
+            return ix;
+    }
+    return -1;
+}
+
+int TFLSettings::GetCardKeptInSlot(int inSlot)
+{
+    if (inSlot==-1)
+        return -1;
+    for (int ix = 0; ix < mCardList.size(); ++ix) {
+        if (mCardList[ix]->KeepInSlot()==inSlot)
+            return ix;
+    }
+    return -1;
+}
