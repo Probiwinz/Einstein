@@ -292,7 +292,6 @@ TFLApp::Run( int argc, char* argv[] )
     InitSettings();
 
 #if 1
-    mFLSettings->useMonitor = 1;
     TBufferLog *bl = new TBufferLog();
 #if !NDEBUG
 #if TARGET_OS_WIN32
@@ -304,7 +303,6 @@ TFLApp::Run( int argc, char* argv[] )
 #endif
     mLog = bl;
 #else
-    mFLSettings->useMonitor = 0;
     mLog = new TFileLog("/tmp/Einstein_log.txt");
 #endif
 
@@ -320,7 +318,7 @@ TFLApp::Run( int argc, char* argv[] )
         if (!firstAttempt || !mFLSettings->dontShow)
             mFLSettings->ShowSettingsPanelModal();
         strncpy(theROMImagePath, mFLSettings->ROMPath, FL_PATH_MAX);
-        mROMImage = TROMImage::LoadROMAndREX(theROMImagePath, mFLSettings->useMonitor, mFLSettings->mUseBuiltinRex);
+        mROMImage = TROMImage::LoadROMAndREX(theROMImagePath, 1, mFLSettings->mUseBuiltinRex);
         if (!mROMImage) {
             fl_alert("Can't load ROM image.\nFile format not supported.");
             continue;
@@ -380,11 +378,12 @@ TFLApp::Run( int argc, char* argv[] )
         wAppWindow->HideMousePointer();
     }
 
-    /*
-    GetPlatformManager()->SendFlashMemoryCardEvent();
-    mMonitor->Show();
-    mMonitor->Stop();
-*/
+    if (mFLSettings->mLaunchMonitorAtBoot) {
+        mMonitor->Show();
+        //if (mFLSettings->mBreatAtROMBoot) {
+        //    mMonitor->Stop();
+        //}
+    }
     // launch the actual emulation in the background
     auto emulatorThread = new std::thread(&TFLApp::EmulatorThreadEntry, this);
 
@@ -966,18 +965,12 @@ void TFLApp::InitPCMCIACardList()
 
 void TFLApp::InitMonitor(const char *theROMImagePath)
 {
-    bool useMonitor = (bool)mFLSettings->useMonitor;
-    if (useMonitor)
-    {
-        char theSymbolListPath[FL_PATH_MAX];
-        strncpy(theSymbolListPath, theROMImagePath, FL_PATH_MAX);
-        fl_filename_setext(theSymbolListPath, FL_PATH_MAX, ".symbols");
-        mSymbolList = new TSymbolList( theSymbolListPath );
-        mMonitor = new TFLMonitor( (TBufferLog*) mLog, mEmulator, mSymbolList, theROMImagePath);
-        ::KTrace("Booting... (Monitor enabled)\n");
-    } else {
-        ::KTrace( "Booting...\n" );
-    }
+    char theSymbolListPath[FL_PATH_MAX];
+    strncpy(theSymbolListPath, theROMImagePath, FL_PATH_MAX);
+    fl_filename_setext(theSymbolListPath, FL_PATH_MAX, ".symbols");
+    mSymbolList = new TSymbolList(theSymbolListPath);
+    mMonitor = new TFLMonitor((TBufferLog*)mLog, mEmulator, mSymbolList, theROMImagePath);
+    ::KTrace("Booting... (Monitor enabled)\n");
 }
 
 
@@ -988,6 +981,7 @@ void
 TFLApp::EmulatorThreadEntry()
 {
     if (mMonitor) {
+        //mMonitor->RunOnStartup(mFLSettings->mBreatAtROMBoot == 0);
         mMonitor->Run();
     } else {
         mEmulator->Run();

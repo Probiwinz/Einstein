@@ -69,28 +69,24 @@ decl {\#include <FL/Fl.H>} {private local
 
 Function {cb_keepInSlot0(Fl_Menu_Item* mi, void* user_data)} {open private return_type void
 } {
-  code {
-    if (mi->value()) {
+  code {if (mi->value()) {
       mi->clear();
       gApp->UserActionKeepPCCardInSlot(-1, (long)user_data);
     } else {
       mi->set();
       gApp->UserActionKeepPCCardInSlot(0, (long)user_data);
-    }
-  } {}
+    }} {}
 }
 
 Function {cb_keepInSlot1(Fl_Menu_Item* mi, void* user_data)} {open private return_type void
 } {
-  code {
-    if (mi->value()) {
+  code {if (mi->value()) {
       mi->clear();
       gApp->UserActionKeepPCCardInSlot(-1, (long)user_data);
     } else {
       mi->set();
       gApp->UserActionKeepPCCardInSlot(1, (long)user_data);
-    }
-  } {}
+    }} {}
 }
 
 Function {cb_changePCCard0(Fl_Widget*, void* user_data)} {open private return_type void
@@ -356,9 +352,13 @@ Original screen size is 320x480} xywh {215 90 80 20} type Int labelsize 12 texts
               tooltip {Hide mouse pointer over MessagePad screen
 Used on pen or touch screen devices.} xywh {120 145 208 20} down_box DOWN_BOX labelsize 13
             }
-            Fl_Check_Button wUseMonitor {
-              label {Debug Terminal}
-              xywh {120 170 196 20} down_box DOWN_BOX labelsize 13 deactivate
+            Fl_Check_Button wLaunchMonitorAtBoot {
+              label {Launch Monitor at Boot}
+              xywh {120 170 196 20} down_box DOWN_BOX labelsize 13
+            }
+            Fl_Check_Button wBreatAtROMBoot {
+              label {Break at ROMBoot}
+              xywh {145 195 196 20} down_box DOWN_BOX labelsize 13 deactivate
             }
             Fl_Box {} {
               label {add screen scale}
@@ -855,7 +855,8 @@ sprintf(buf, "%d", screenHeight);
 wHeight->value(buf);
 wFullScreen->value(fullScreen);
 wHideMouse->value(hideMouse);
-wUseMonitor->value(useMonitor);
+wLaunchMonitorAtBoot->value(mLaunchMonitorAtBoot);
+wBreatAtROMBoot->value(mBreatAtROMBoot);
 
 if (RAMSize<=16)
 	wRAMSizeChoice->value(0);
@@ -892,7 +893,8 @@ screenWidth = atoi(wWidth->value());
 screenHeight = atoi(wHeight->value());
 fullScreen = wFullScreen->value();
 hideMouse = wHideMouse->value();
-useMonitor = wUseMonitor->value();
+mLaunchMonitorAtBoot = wLaunchMonitorAtBoot->value();
+mBreatAtROMBoot = wBreatAtROMBoot->value();
 
 const Fl_Menu_Item *m = wRAMSizeChoice->mvalue();
 if (m)

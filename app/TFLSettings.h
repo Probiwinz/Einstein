@@ -136,10 +136,12 @@ public:
     int screenWidth;
     int screenHeight;
     int hideMouse;
-    int useMonitor;
     int fullScreen;
     int RAMSize;
     int dontShow;
+
+    int mLaunchMonitorAtBoot = 0;
+    int mBreatAtROMBoot = 0;
 
     // some initial position for our application screen
     int mAppWindowPosX = 150;

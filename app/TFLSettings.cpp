@@ -256,12 +256,14 @@ void TFLSettings::loadPreferences()
         screen.get("height", screenHeight, 480);
         screen.get("fullScreen", fullScreen, 0);
         screen.get("hideMouse", hideMouse, 0);
-        screen.get("useMonitor", useMonitor, 0);
 
         screen.get("AppWindowPosX", mAppWindowPosX, 150);
         screen.get("AppWindowPosY", mAppWindowPosY, 150);
         screen.get("AllowScreenResize", mAllowScreenResize, true);
         screen.get("AllowFullscreen", mAllowFullscreen, true);
+
+        screen.get("LaunchMonitorAtBoot", mLaunchMonitorAtBoot, 0);
+        screen.get("BreatAtROMBoot", mBreatAtROMBoot, 0);
     }
 
     // Memory preferences
@@ -321,12 +323,14 @@ void TFLSettings::savePreferences()
         screen.set("height", screenHeight);
         screen.set("fullScreen", fullScreen);
         screen.set("hideMouse", hideMouse);
-        screen.set("useMonitor", useMonitor);
 
         screen.set("AppWindowPosX", mAppWindowPosX);
         screen.set("AppWindowPosY", mAppWindowPosY);
         screen.set("AllowScreenResize", mAllowScreenResize);
         screen.set("AllowFullscreen", mAllowFullscreen);
+
+        screen.set("LaunchMonitorAtBoot", mLaunchMonitorAtBoot);
+        screen.set("BreatAtROMBoot", mBreatAtROMBoot);
     }
 
     // Memory preferences
