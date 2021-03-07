@@ -64,10 +64,14 @@ public:
 
     const char *GetUUID() { return mUUID; }
 
-    const char *GetName() { return mName; }
+    const char* GetName() { return mName; }
 
     void SetName(const char* inName);
-    
+
+    const char* GetTag() { return mTag; }
+
+    void SetTag(const char* inTag);
+
     void SetType(CardType inType) { mType = inType; }
 
     CardType GetType() { return mType; }
@@ -81,6 +85,7 @@ private:
     char *mUUID = nullptr;
     char *mName = nullptr;
     char* mImagePath = nullptr;
+    char* mTag = nullptr;
     CardType mType = CardType::kUndefined;
 };
 

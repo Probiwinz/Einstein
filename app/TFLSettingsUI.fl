@@ -82,8 +82,7 @@ class TFLSettingsUI {open : {public TFLSettings}
   Function {TFLSettingsUI()} {} {
     code {// create the setting dialog so we have it available for the user
 mSettingsPanel = CreateSettingsPanel();
-wAbout = nullptr;
-} {}
+wAbout = nullptr;} {}
   }
   Function {CreateSettingsPanel()} {
     comment override open
@@ -626,6 +625,21 @@ if (ix>0 && ix<=wPCCardList->size()) {
 }}
                 xywh {10 10 100 20} labelsize 12
               }
+              MenuItem wPCCardEditTag {
+                label {Edit Card Tag...}
+                callback {int ix = wPCCardList->value();
+if (ix>0 && ix<=wPCCardList->size()) {
+  TFLPCCardSettings *card = (TFLPCCardSettings*)wPCCardList->data(ix);
+  const char *oldTag = card->GetTag();
+  const char *newTag = fl_input(
+  	"Please enter a new Tag for you PCCard\\n\\n"
+  	"Tags should be at most four upper case\\n"
+  	"characters long.\\n", oldTag);
+  if (newTag)
+    card->SetTag(newTag);
+}}
+                xywh {20 20 100 20} labelsize 12
+              }
               MenuItem wPCCardEditPath {
                 label {Edit Card Image Path...}
                 callback {int ix = wPCCardList->value();
@@ -727,6 +741,9 @@ mSettingsPanel->hide();}
     code {\#define MENU_FONT FL_NORMAL_LABEL, FL_HELVETICA, 14, 0
 \#define MENU_HEADLINE FL_NORMAL_LABEL, FL_HELVETICA_BOLD_ITALIC, 14, 0
 
+  if (wNetworkTool) wNetworkTool->clearTopID();
+  if (wNetworkTool) wNetworkTool->clearBottomID();
+
   Fl_Menu_Item* slot0menu = (Fl_Menu_Item*)calloc(mCardList.size() + 5, sizeof(Fl_Menu_Item));
   if (wPCCardSlot0->user_data()) ::free(wPCCardSlot0->user_data());
   wPCCardSlot0->flags |= FL_SUBMENU_POINTER;
@@ -777,10 +794,12 @@ mSettingsPanel->hide();}
     if (c0 && c0==card->Card()) {
         slot0menu[i+3].labelfont_ |= 1;
         slot1menu[i+3].flags |= FL_MENU_INACTIVE;
+        if (wNetworkTool) wNetworkTool->setTopID(card->GetTag());
     }
     if (c1 && c1==card->Card()) {
         slot1menu[i+3].labelfont_ |= 1;
         slot0menu[i+3].flags |= FL_MENU_INACTIVE;
+        if (wNetworkTool) wNetworkTool->setBottomID(card->GetTag());
     }
   }} {}
   }

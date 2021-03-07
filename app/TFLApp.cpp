@@ -71,6 +71,77 @@
 // ----- Ethernet Emulation
 // TODO: NPDS not working: incomming TCP/IP connections don't work
 
+/*
+
+Documentation:
+
+User's Manual: Title, Introduction and Purpose, Setup guide, Use Guide for all features, Appendices (Resources, Licenses, Contact Information)
+ - it's not a nove, users want to get started quickly
+ - what is the purpose of this manual
+ - don't leave out even 'obvious' steps when explaining something blow by blow
+ - who's the audience? What do they want to achieve? User may not have previous knowledge.
+ - collect all information that you want to write down
+ - structure the colection, create categories by what users may be trying to find
+ - write the content, focus on the goal, help the user solve his issue
+ - use numbered lists
+ - add structure aith the Table of Contents
+ - add graphics, screenshots, and even video (explaining stuff in words isboring)
+
+ Title
+  - app name, copyright, authors, linked software and their licenses
+ Introduction
+  - One short paragraph about the MessagePad/eMate300
+  - What is an emulator
+  - What does Einstein emulate (and what is lacking)
+  - Supported Platforms
+ First launch
+  - What is a ROM and where to get it 
+  - What is Flash, and how do I set it up
+  - How much system RAM to choose
+  - Launching an quitting the meulator
+ Essential Apps
+  - the Y10k patch
+  - built-in NewtTest
+ How to use the main screen 
+  - resizing and fullscreen vs. changing resolution
+  - copy and paste
+  - drag and drop
+  - installing apps from disk and internet
+  - menus
+ How to sync over the 'serial' line
+  - (built-in Einstein Prefs)
+  - the Dock and its counterparts on various platforms (does this warrant its own chapter?)
+ Networking setup
+  - install apps with direct links
+  - what to enter in the dialogs
+  - browser, eMail, Network Dock
+ PCMCIA Card Setup
+  - how to create new cards
+  - how to use card images
+  - how to save and backup cards
+  - how to dump physical crads int a card image
+ Configuring multiple MessagePads and eMates
+  - detailed settings for a new machine
+  - detailed settings for a hardware
+  - how to launch a different machine setup
+ Toolkit overview
+  - loading and launching sample apps
+ Monitor overview
+  - breaking into machine code
+  - single stepping
+  - looking at ram and registers
+  - continue execution
+ Appendices 
+  - more Resources
+  - Licenses
+  - Contact Information
+
+
+
+Developer's Documentation: Basic Ideas, Basic Features, Detailed Class Reference (Doxygen)
+
+
+*/
 
 /*
  Einstein threads:

@@ -57,16 +57,22 @@ TFLPCCardSettings::TFLPCCardSettings(Fl_Preferences &prefs)
     switch (type) {
     case 0:
         SetType(CardType::kUndefined);
+        SetTag("????");
         break;
     case 1:
         SetType(CardType::kNetwork);
+        SetTag(">NET");
         break;
     case 2:
         SetType(CardType::kLinear);
+        SetTag("FLSH");
         if (mImagePath) ::free(mImagePath);
         prefs.get("imagePath", mImagePath, "");
         break;
     }
+    char newTag[32];
+    prefs.get("tag", newTag, "", 30);
+    if (newTag[0]) SetTag(newTag);
 }
 
 
@@ -88,6 +94,7 @@ TFLPCCardSettings* TFLPCCardSettings::LinkLinearPCCard(const char* inName, const
     TFLPCCardSettings* card = new TFLPCCardSettings();
     card->SetName(inName);
     card->SetType(CardType::kLinear);
+    card->SetTag("FLSH");
     card->SetImagePath(inImageFilename);
     return card;
 }
@@ -123,11 +130,14 @@ TFLPCCardSettings::~TFLPCCardSettings()
         ::free(mUUID);
     if (mName)
         ::free(mName);
+    if (mTag)
+        ::free(mTag);
 }
 
 void TFLPCCardSettings::WritePrefs(Fl_Preferences &prefs)
 {
     prefs.set("name", mName);
+    prefs.set("tag", mTag);
     switch (mType) {
     case CardType::kUndefined:
         prefs.set("type", 0);
@@ -144,11 +154,21 @@ void TFLPCCardSettings::WritePrefs(Fl_Preferences &prefs)
 
 void TFLPCCardSettings::SetName(const char* inName)
 {
-    if (mName) 
+    if (mName)
         ::free(mName);
     mName = nullptr;
     if (inName)
         mName = strdup(inName);
+}
+
+void TFLPCCardSettings::SetTag(const char* inTag)
+{
+    if (mTag)
+        ::free(mTag);
+    if (inTag)
+        mTag = strdup(inTag);
+    else
+        mTag = strdup("---");
 }
 
 void TFLPCCardSettings::SetImagePath(const char* inImagePath)
