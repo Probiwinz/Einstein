@@ -37,7 +37,7 @@ const KUInt32 kROMPatchVoid = ~0;
 /**
  \brief Manage all code patches.
 
- This class is completely static and does not need to be instantiated.
+ This class is completely static and does not need to be instatiated anywhere.
  It keeps track of all patches as they are created, and applies them after the
  ROM is initialized.
  */
@@ -66,7 +66,7 @@ public:
 /**
  \brief This abstract class is the base implementation for all types of patches.
 
- New types of patch can be based on this class or any of the derived classes.
+ New types of patches can be based on this class or any of the derived classes.
  The only method that must be overridden is `Apply(KUInt32 *ROM)`, which
  replaces one instruction word in ROM with another instruction.
  */
