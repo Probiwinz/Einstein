@@ -81,7 +81,7 @@ public:
 	///
 	/// Is output running?
 	///
-	virtual bool	OutputIsRunning( void );
+	virtual Boolean	OutputIsRunning( void );
 
 	///
 	/// Method called to signal a change in the output volume.

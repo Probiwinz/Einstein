@@ -334,7 +334,7 @@ TPortAudioSoundManager::StopOutput( void )
 // -------------------------------------------------------------------------- //
 //  * OutputIsRunning( void )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TPortAudioSoundManager::OutputIsRunning( void )
 {
 #ifdef DEBUG_SOUND

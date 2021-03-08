@@ -129,10 +129,10 @@ public:
     // ---  Events from within the emulator
 
     // this is called by the screen manager when the state of the backlight changed
-    void PowerChangedEvent(bool);
+    void PowerChangedEvent(Boolean);
 
     // this is called by the screen manager when the state of the backlight changed
-    void BacklightChangedEvent(bool);
+    void BacklightChangedEvent(Boolean);
 
     // Newton OS needs a new screen size (usually by rotating the screen)
     void ResizeFromNewton(int w, int h);
@@ -171,7 +171,7 @@ private:
 				const char* inClass,
 				int inPortraitWidth,
 				int inPortraitHeight,
-				bool inFullScreen);
+                Boolean inFullScreen);
 
     // create a log file
 	void CreateLog( const char* inPath );

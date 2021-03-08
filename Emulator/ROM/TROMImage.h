@@ -106,7 +106,7 @@ public:
     static const KSInt32 kMP2x00DROM = 1;
     static const KSInt32 kEMate300ROM = 2;
 
-    static TROMImage *LoadROMAndREX(const char *theROMImagePath, bool useMonitor, bool useExternalERex);
+    static TROMImage *LoadROMAndREX(const char *theROMImagePath, Boolean useMonitor, Boolean useExternalERex);
 
 protected:
 

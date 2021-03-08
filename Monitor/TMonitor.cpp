@@ -173,7 +173,7 @@ TMonitor::Run()
         RunEmulator();
     }
 	
-	bool loop = true;
+	Boolean loop = true;
 	while (loop)
 	{
         DrawScreen();
@@ -231,7 +231,7 @@ TMonitor::RunEmulator()
 
 	// Get the instruction.
 	KUInt32 instruction;
-	bool instructionIsBP = false;
+	Boolean instructionIsBP = false;
 	if (!mMemory->Read((TMemory::VAddr) realPC, instruction ))
 	{
 		if ((instruction & 0xFFF000F0) == 0xE1200070)
@@ -291,7 +291,7 @@ void TMonitor::StepEmulator()
 
 	// Get the instruction.
 	KUInt32 instruction;
-	bool instructionIsBP = false;
+	Boolean instructionIsBP = false;
 	if (!mMemory->Read((TMemory::VAddr) realPC, instruction ))
 	{
 		if ((instruction & 0xFFF000F0) == 0xE1200070)
@@ -406,10 +406,10 @@ TMonitor::RevertEmulatorState( const char *inFilename )
 // -------------------------------------------------------------------------- //
 // ProcessBreakpoint( KUInt16, KUInt32 )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TMonitor::ProcessBreakpoint( KUInt16 inBPID, KUInt32 inBPAddr )
 {
-	bool stop = true;
+	Boolean stop = true;
 
 	switch (inBPID)
 	{
@@ -519,7 +519,7 @@ static char cc(unsigned int v) {
 // -------------------------------------------------------------------------- //
 // ExecuteStartupScript()
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TMonitor::ExecuteStartupScript()
 {
 	bool theResult = true;
@@ -535,10 +535,10 @@ TMonitor::ExecuteStartupScript()
 // -------------------------------------------------------------------------- //
 // ExecuteCommand( const char* inCommand )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TMonitor::ExecuteCommand( const char* inCommand )
 {
-	bool theResult = true;
+	Boolean theResult = true;
 	int theArgInt, theArgInt2;
 	char theLine[256];
 
@@ -663,7 +663,7 @@ TMonitor::ExecuteCommand( const char* inCommand )
 	} else if ((::strcmp(inCommand, "t") == 0)
 		|| (::strcmp(inCommand, "trace") == 0)) {
 		// Is it a jump?
-		bool putBPAndRun = false;
+		Boolean putBPAndRun = false;
 
 		KUInt32 instruction;
 		KUInt32 realPC = mProcessor->GetRegister(15) - 4;
@@ -815,7 +815,7 @@ TMonitor::ExecuteCommand( const char* inCommand )
 			PrintLine(theLine, MONITOR_LOG_INFO);
 		}
 	} else if (::sscanf(inCommand, "dl P%X", &theArgInt) == 1) {
-		bool fault = false;
+		Boolean fault = false;
 		KUInt32 theData = mMemory->ReadP(
 				(TMemory::VAddr) theArgInt, fault );
 		if (fault)
@@ -962,7 +962,7 @@ TMonitor::ExecuteCommand( const char* inCommand )
 		}
 	} else if (::sscanf(inCommand, "dm P%X-%X", &theArgInt, &theArgInt2) == 2) {
 		KUInt32 theData[4];
-		bool fault = false;
+		Boolean fault = false;
 		while (((KUInt32) theArgInt) < ((KUInt32) theArgInt2))
 		{
 			theData[0] = mMemory->ReadP(
@@ -995,7 +995,7 @@ TMonitor::ExecuteCommand( const char* inCommand )
 	} else if (::sscanf(inCommand, "dm P%X", &theArgInt) == 1) {
 		KUInt32 theData[4];
 		KUInt32 last;
-		bool fault = false;
+		Boolean fault = false;
 		for (last = theArgInt + 64; ((KUInt32) theArgInt) < last; theArgInt += 16)
 		{
 			theData[0] = mMemory->ReadP(
@@ -1219,10 +1219,10 @@ TMonitor::ExecuteCommand( const char* inCommand )
 // -------------------------------------------------------------------------- //
 // ExecuteHelpCommand( const char* inCommand )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TMonitor::ExecuteHelpCommand( const char* inCommand )
 {
-	bool theResult = true;
+	Boolean theResult = true;
 	if (::strcmp(inCommand, "log") == 0) {
 		PrintLoggingHelp();
 	} else if (::strcmp(inCommand, "script") == 0) {
@@ -1333,10 +1333,10 @@ TMonitor::PrintWatchpointHelp()
 // -------------------------------------------------------------------------- //
 // DrawScreen( void )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TMonitor::DrawScreen()
 {
-	bool theResult = false;
+	Boolean theResult = false;
 	if (mHalted)
 	{
 		if (!mLastScreenHalted)
@@ -1539,7 +1539,7 @@ TMonitor::DrawScreenHalted( void )
 				(unsigned int) realPC + indexLines,
 				(unsigned int) mMemory->GetFaultStatusRegister() );
 		} else {
-			bool instIsBP = false;
+			Boolean instIsBP = false;
 			if ((instruction & 0xFFF000F0) == 0xE1200070)
 			{
 				if (!mMemory->ReadBreakpoint(

@@ -85,7 +85,7 @@ public:
 	///
 	/// \return \c true if the mutex was locked.
 	///
-	bool TryLock( void );
+	Boolean TryLock( void );
 
 private:
 	///

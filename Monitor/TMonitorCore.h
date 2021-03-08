@@ -72,14 +72,14 @@ public:
 	/// \return false, if the script file was not found, or the result of
 	///         the script operations.
 	///
-	bool		ExecuteScript( const char* inScriptFile );
+	Boolean		ExecuteScript( const char* inScriptFile );
 	
 	///
 	/// Execute a command.
 	///
 	/// \return true if the command was known.
 	///
-	virtual bool ExecuteCommand( const char* inCommand );
+	virtual Boolean ExecuteCommand( const char* inCommand );
 
 	/// \name Variables
 	TMemory*				mMemory;			///< Memory.

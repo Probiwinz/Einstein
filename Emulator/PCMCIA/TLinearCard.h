@@ -241,7 +241,7 @@ private:
 	std::mutex mMutex;
 	std::promise<void>* mPageFlushPromise = nullptr;
 	std::future<void> mPageFlushFuture;
-	std::vector<bool> mPageDirty;
+	std::vector<Boolean> mPageDirty;
 
 	const int kPageSizeShift = 14; // 16kByte pages;
 	const int kPageSize = 1 << kPageSizeShift;

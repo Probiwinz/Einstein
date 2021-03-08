@@ -278,7 +278,7 @@ void TFLSettings::loadPreferences()
     // --- a list of known PCMCIA Cards
     Fl_Preferences cardlist(pcmcia, "CardList");
 
-    bool networkCardFound = false;
+    Boolean networkCardFound = false;
     for (int i=0; i<cardlist.groups(); i++) {
         Fl_Preferences cardprefs(cardlist, i);
         TFLPCCardSettings *card = new TFLPCCardSettings(cardprefs);
@@ -474,8 +474,8 @@ void TFLSettings::UnplugPCCard(int ix)
 */
 void TFLSettings::KeepPCCardInSlot(int inSlot, int inCard)
 {
-    bool clearIf0 = (inSlot==0);
-    bool clearIf1 = (inSlot==1);
+    Boolean clearIf0 = (inSlot==0);
+    Boolean clearIf1 = (inSlot==1);
 
     for (int ix = 0; ix < mCardList.size(); ++ix) {
         TFLPCCardSettings* card = mCardList[ix];

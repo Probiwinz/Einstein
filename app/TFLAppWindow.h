@@ -58,7 +58,7 @@ public:
 
 private:
     TFLApp      *mApp = nullptr;
-    bool        mMouseHidden = false;
+    Boolean        mMouseHidden = false;
 };
 
 

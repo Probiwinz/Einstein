@@ -64,7 +64,7 @@ class TFileManager;
 	
 	CocoaScreenProxy*	mProxy;
 	
-	bool				mQuit;
+	Boolean				mQuit;
 	int					mRAMSize;
 	NSString*			mFlashPath;
 	NSString*			mROMPath;

@@ -180,7 +180,7 @@ public:
 	 * \param copy if set, the packet data will be copied, otherwise this class
 	 *        will only point at the buffer
 	 */
-	Packet(KUInt8 *data, ssize_t size, bool copy=1) {
+	Packet(KUInt8 *data, ssize_t size, Boolean copy=1) {
 		if (copy) {
 			mData = (KUInt8*)malloc(size);
 			if (data) {

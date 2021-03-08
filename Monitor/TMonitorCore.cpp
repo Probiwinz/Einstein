@@ -66,7 +66,7 @@ void TMonitorCore::PrintLine(const char* inLine, int type)
 // -------------------------------------------------------------------------- //
 // ExecuteScript( const char* inCommand )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TMonitorCore::ExecuteScript( const char* inScriptFile )
 {
 	bool theResult = true;
@@ -100,14 +100,14 @@ TMonitorCore::ExecuteScript( const char* inScriptFile )
 // -------------------------------------------------------------------------- //
 // ExecuteCommand( const char* inCommand )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TMonitorCore::ExecuteCommand( const char* inCommand )
 {
 #if TARGET_OS_WIN32
 	assert(0); // FIXME later
 	return 0;
 #else
-	bool theResult = true;
+	Boolean theResult = true;
 	
 	if (inCommand[0]=='#') {
 		// script comment

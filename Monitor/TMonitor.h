@@ -54,42 +54,42 @@ public:
 	/// Constructor from the emulator.
 	///
 	TMonitor(
-			TBufferLog* inLog,
-			TEmulator* inEmulator,
-			TSymbolList* inSymbolList,
-			const char* inROMPath);
+		TBufferLog* inLog,
+		TEmulator* inEmulator,
+		TSymbolList* inSymbolList,
+		const char* inROMPath);
 
 	///
 	/// Destructor.
 	///
-	virtual ~TMonitor( void );
+	virtual ~TMonitor(void);
 
 	///
 	/// Draw screen.
 	/// Return true if the screen was erased.
 	///
-	virtual bool DrawScreen();
+	virtual Boolean DrawScreen();
 
 	///
 	/// Determine if the machine is halted.
 	///
-	bool		IsHalted( void ) const
-		{
-			return mHalted;
-		}
+	Boolean		IsHalted(void) const
+	{
+		return mHalted;
+	}
 
-    ///
-    /// Was the last screen update showing the "Halted..." screen?
-    ///
-    bool IsLastScreenHalted() const
-    {
+	///
+	/// Was the last screen update showing the "Halted..." screen?
+	///
+	Boolean IsLastScreenHalted() const
+	{
         return mLastScreenHalted;
     }
 
     ///
     /// Was the last screen update showing the "Halted..." screen?
     ///
-    void SetLastScreenHalted(bool v)
+    void SetLastScreenHalted(Boolean v)
     {
         mLastScreenHalted = v;
     }
@@ -149,21 +149,21 @@ public:
 	///
 	/// \return true if /ROMPath/monitorrc was found and run.
 	///
-	bool		ExecuteStartupScript();
+	Boolean		ExecuteStartupScript();
 
     ///
 	/// Execute a command.
 	///
 	/// \return true if the command was known.
 	///
-	bool		ExecuteCommand( const char* inCommand );
+	Boolean		ExecuteCommand( const char* inCommand );
 
 	///
 	/// Execute the help command.
 	///
 	/// \return true if the command was known.
 	///
-	bool		ExecuteHelpCommand( const char* inCommand );
+	Boolean		ExecuteHelpCommand( const char* inCommand );
 
 	///
 	/// Save the current state of the Emulator to a file.
@@ -282,7 +282,7 @@ protected:
 	/// \param inBPAddr		address of the breakpoint.
 	/// \return true if the machine should be stopped.
 	///
-	virtual bool		ProcessBreakpoint( KUInt16 inBPID, KUInt32 inBPAddr );
+	virtual Boolean		ProcessBreakpoint( KUInt16 inBPID, KUInt32 inBPAddr );
 
 private:
 	///
@@ -368,7 +368,7 @@ private:
 	TARMProcessor*			mProcessor;			///< CPU.
 	TInterruptManager*		mInterruptManager;	///< Interrupt manager.
 	TBufferLog*				mLog;				///< Interface to the log.
-	bool					mHalted;			///< If the emulator is halted.
+	Boolean					mHalted;			///< If the emulator is halted.
 	TCondVar				*mCondVar = nullptr;
 	TMutex					*mMutex = nullptr;
 	ECommand				mCommand;			///< Next command for the
@@ -379,10 +379,10 @@ private:
 #else
 	int						mSocketPair[2];		///< Socket pair for monitor state changes.
 #endif
-	bool					mLastScreenHalted;	///< If last screen was halted.
+	Boolean					mLastScreenHalted;	///< If last screen was halted.
 	char*					mROMPath;			///< path to the ROM fle directory
 
-    bool                    mRunOnStartup = false; ///< Run the emulation as soon as the monitor starts
+    Boolean                    mRunOnStartup = false; ///< Run the emulation as soon as the monitor starts
 };
 
 #endif

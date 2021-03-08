@@ -203,7 +203,7 @@ public:
 	///
 	/// \return \c true if we are.
 	///
-	inline bool	IsBPHalted( void )
+	inline Boolean	IsBPHalted( void )
 		{
 			return mBPHalted;
 		}
@@ -213,7 +213,7 @@ public:
 	///
 	/// \return \c true if we are.
 	///
-	inline bool	IsInterrupted( void )
+	inline Boolean	IsInterrupted( void )
 		{
 			return mInterrupted;
 		}
@@ -233,7 +233,7 @@ public:
 	///
 	/// \return \c true if we are.
 	///
-	inline bool	IsPaused( void )
+	inline Boolean	IsPaused( void )
 		{
 			return mPaused;
 		}
@@ -243,7 +243,7 @@ public:
 	///
 	/// \return \c true if we are.
 	///
-	inline bool	IsRunning( void )
+	inline Boolean	IsRunning( void )
 		{
 			return mRunning;
 		}

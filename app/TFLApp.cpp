@@ -310,14 +310,14 @@ TFLApp::Run( int argc, char* argv[] )
 #endif
 
     int ramSize = mFLSettings->RAMSize;
-    bool hidemouse = (bool)mFLSettings->hideMouse;
+    Boolean hidemouse = (Boolean)mFLSettings->hideMouse;
 
     ::KTrace( "Welcome to Einstein console.\n" );
     ::KTrace( "This is %s.\n", VERSION_STRING );
 
     static char theROMImagePath[FL_PATH_MAX];
 
-    for (bool firstAttempt=true;;firstAttempt=false) {
+    for (Boolean firstAttempt=true;;firstAttempt=false) {
         if (!firstAttempt || !mFLSettings->dontShow)
             mFLSettings->ShowSettingsPanelModal();
         strncpy(theROMImagePath, mFLSettings->ROMPath, FL_PATH_MAX);
@@ -751,7 +751,7 @@ int TFLApp::UserActionKeepPCCardInSlot(int inSlot, int inIndex)
 /**
  This is called by the screen manager when the state of the backlight changed.
  */
-void TFLApp::PowerChangedEvent(bool inState)
+void TFLApp::PowerChangedEvent(Boolean inState)
 {
     // we have a hidden button in the FLuid file that does nothing but keep
     // track of the "on" image.
@@ -776,7 +776,7 @@ void TFLApp::PowerChangedEvent(bool inState)
 /**
  This is called by the screen manager when the state of the backlight changed.
  */
-void TFLApp::BacklightChangedEvent(bool inState)
+void TFLApp::BacklightChangedEvent(Boolean inState)
 {
     // we have a hidden button in the FLuid file that does nothing but keep
     // track of the "on" image.
@@ -1020,11 +1020,11 @@ void TFLApp::CreateScreenManager(
                                  const char* inClass,
                                  int inPortraitWidth,
                                  int inPortraitHeight,
-                                 bool inFullScreen)
+                                 Boolean inFullScreen)
 {	
     if (::strcmp( inClass, "FL" ) == 0)
     {
-        bool screenIsLandscape = true;
+        Boolean screenIsLandscape = true;
 
         KUInt32 theWidth;
         KUInt32 theHeight;
@@ -1128,7 +1128,7 @@ T_ROM_INJECTION(0x001B37FC, 0x001B5CD4, 0x001A1660, "AddClipboard__9TRootViewFRC
     int nData = (int)TNewt::RefArrayGetNumSlots(data);
 
     std::string clipboardText = "";
-    bool firstText = true;
+    Boolean firstText = true;
     for (int i=0; i<nData; i++) {
         NewtRef dataSet = TNewt::RefArrayGetSlot(data, i);
 //        TNewt::PrintRef(dataSet, 8);
@@ -1181,14 +1181,14 @@ static void tabs_box(int x, int y, int w, int h, Fl_Color c)
     fl_rectf(x, y+barHgt, w, h-barHgt, c);
 }
 
-static const char *tfl_file_chooser(const char *message, const char *pat, const char *fname, bool save)
+static const char *tfl_file_chooser(const char *message, const char *pat, const char *fname, Boolean save)
 {
 #if 0
     char pattern[FL_PATH_MAX]; pattern[0] = 0;
     if (pat) {
         const char *s = pat;
         char *d = pattern;
-        bool brackets = false;
+        Boolean brackets = false;
         while (*s) {
             char c = *s++;
             if (c=='\t') {

@@ -150,7 +150,7 @@ public:
 private:
 	/// \name Variables
 	FILE*		mFile;				///< Pointer to the file.
-	bool		mWeOpenedTheFile;	///< If we opened the file (and if we should
+	Boolean		mWeOpenedTheFile;	///< If we opened the file (and if we should
 									///< close it).
 };
 

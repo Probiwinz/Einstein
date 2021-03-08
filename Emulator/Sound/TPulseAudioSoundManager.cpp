@@ -357,10 +357,10 @@ TPulseAudioSoundManager::StopOutput( void )
 // -------------------------------------------------------------------------- //
 //  * OutputIsRunning( void )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TPulseAudioSoundManager::OutputIsRunning( void )
 {
-    bool streamCorked = (bool)pa_stream_is_corked(mOutputStream);
+    Boolean streamCorked = (Boolean)pa_stream_is_corked(mOutputStream);
 #ifdef DEBUG_SOUND
     if (GetLog()) {
         GetLog()->FLogLine("   *****  OutputIsRunning: (PA Stream Corked? %s) (mOutputIsRunning? %s)",

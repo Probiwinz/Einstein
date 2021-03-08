@@ -123,7 +123,7 @@ public:
 	///
 	/// Is the system powered on?
 	///
-	bool IsPowerOn( void ) { return mPowerOn; }
+	Boolean IsPowerOn( void ) { return mPowerOn; }
 	
 	/**
 	 * Keep Einstein from triggering new Platform Interrupts.
@@ -233,19 +233,19 @@ public:
 	/// Get next event from the queue (and remove it).
 	/// Address is wired (and physical).
 	///
-	bool	GetNextEvent( KUInt32 outEventPAddr );
+	Boolean	GetNextEvent( KUInt32 outEventPAddr );
 
 	///
 	/// Dispose a buffer from the queue.
 	/// \return true if the buffer was found and removed.
 	///
-	bool	DisposeBuffer( KUInt32 inID );
+	Boolean	DisposeBuffer( KUInt32 inID );
 
 	///
 	/// Copy some buffer data (and remove the buffer).
 	/// \return true if the write operation succeeded.
 	///
-	bool	CopyBufferData( KUInt32 inID, KUInt32 outVAddress, KUInt32 inOffset, KUInt32 inAmount );
+	Boolean	CopyBufferData( KUInt32 inID, KUInt32 outVAddress, KUInt32 inOffset, KUInt32 inAmount );
 
 	///
 	/// Display a choice of options on the host platform. This is for devices
@@ -326,8 +326,8 @@ private:
 	KUInt32				mBufferCount = 0;		    ///< Number of buffers.
 	KUInt32				mBufferQueueSize = kDEFAULTBUFFERQUEUESIZE;	///< Size of the buffer queue.
 	KUInt32				mBufferNextID = 0;		    ///< Next ID for buffers.
-	bool				mPowerOn = true;			///< If power is on.
-	bool				mQueuePreLock = false;		///< Non-recursive lock to keep interrupts from triggering twice 
+	Boolean				mPowerOn = true;			///< If power is on.
+	Boolean				mQueuePreLock = false;		///< Non-recursive lock to keep interrupts from triggering twice 
 	KUInt32				mQueueLockCount = 0;	    ///< Lock count for the queue.
 	TMutex*				mMutex = nullptr;			///< Mutex of the queue.
 	char*				mDocDir = nullptr;			///< Directory on host containing all kinds of documents

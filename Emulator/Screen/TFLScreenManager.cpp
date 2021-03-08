@@ -125,7 +125,7 @@ class Fl_Newton_Screen_Widget : public Fl_Box
     TFLApp              *mApp = nullptr;
 	int					rgbWidth_, rgbHeight_;
 	int					penX, penY, penIsDown;
-    bool                mPowerState = false;
+	Boolean             mPowerState = false;
 
 public:
 	Fl_Newton_Screen_Widget(int x, int y, int w, int h, const char *l, TFLScreenManager *s, TFLApp *inApp)
@@ -615,7 +615,7 @@ TFLScreenManager::PowerOffScreen( void )
 //  * BacklightChanged( bool )
 // -------------------------------------------------------------------------- //
 void
-TFLScreenManager::BacklightChanged( bool inState)
+TFLScreenManager::BacklightChanged( Boolean inState )
 {
     gApp->BacklightChangedEvent(inState);
 	UpdateScreenRect(0L);
