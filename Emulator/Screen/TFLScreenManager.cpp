@@ -516,9 +516,10 @@ TFLScreenManager::TFLScreenManager(
 			TLog* inLog /* = nil */,
 			KUInt32 inPortraitWidth /* = kDefaultPortraitWidth */,
 			KUInt32 inPortraitHeight /* = kDefaultPortraitHeight */,
-			bool inFullScreen /* = false */,
-			bool inScreenIsLandscape /* = true */)
-:	TScreenManager(
+			Boolean inFullScreen /* = false */,
+			Boolean inScreenIsLandscape /* = true */)
+	:
+		TScreenManager(
 		inLog,
 		inPortraitWidth,
 		inPortraitHeight,
@@ -612,7 +613,7 @@ TFLScreenManager::PowerOffScreen( void )
 }
 
 // -------------------------------------------------------------------------- //
-//  * BacklightChanged( bool )
+//  * BacklightChanged( Boolean )
 // -------------------------------------------------------------------------- //
 void
 TFLScreenManager::BacklightChanged( Boolean inState )

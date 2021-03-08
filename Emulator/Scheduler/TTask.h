@@ -28,7 +28,6 @@
 
 // K
 #include <K/Misc/TDoubleLinkedList.h>
-#include <K/Threads/TThread.h>
 
 ///
 /// Class for a task in Einstein.
