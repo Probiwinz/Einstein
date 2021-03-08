@@ -45,7 +45,7 @@ public:
 	virtual void PrintLine(const char *inLine, int type);
 	void SetController(TCocoaMonitorController *inController);
 
-	bool ProcessBreakpoint( KUInt16 inBPID, KUInt32 inBPAddr );
+	Boolean ProcessBreakpoint( KUInt16 inBPID, KUInt32 inBPAddr );
 
 	NSString* GetAlarm();
 	NSString* GetCPSR();

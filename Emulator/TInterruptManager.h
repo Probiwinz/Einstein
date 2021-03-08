@@ -158,7 +158,7 @@ public:
 	/// \param inMaskIRQ	don't wake up if the interrupt is an IRQ.
 	/// \param inMaskFIQ	don't wake up if the interrupt is a FIQ.
 	///
-	void	WaitUntilInterrupt( bool inMaskIRQ, bool inMaskFIQ );
+	void	WaitUntilInterrupt( Boolean inMaskIRQ, Boolean inMaskFIQ );
 
 	///
 	/// Wake the emulator, if it's waiting in the loop.
@@ -407,7 +407,7 @@ private:
 	///
 	/// \return \c true if there is any next interrupt.
 	///
-	bool	FireTimersAndFindNext(
+	Boolean	FireTimersAndFindNext(
 					KUInt32 inTicks,
 					KUInt32 inNewTicks,
 					KUInt32* outNextMatch );

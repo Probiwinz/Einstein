@@ -76,7 +76,7 @@ test()
 	makecontext(&uc, (void(*)())assign, 2, 123L, &value);
 	swapcontext(&back, &uc);
 	
-	KTrace("done %d\n", value);
+	KPrintf("done %d\n", value);
 	
 	return (0);
 }
@@ -143,10 +143,10 @@ TJITGeneric::~TJITGeneric( void )
 }
 
 // -------------------------------------------------------------------------- //
-//  * Run( TARMProcessor*, volatile bool* )
+//  * Run( TARMProcessor*, volatile Boolean* )
 // -------------------------------------------------------------------------- //
 void
-TJITGeneric::Run( TARMProcessor* ioCPU, volatile bool* inSignal )
+TJITGeneric::Run( TARMProcessor* ioCPU, volatile Boolean* inSignal )
 {
 	volatile KUInt32* pendingInterrupts = &ioCPU->mPendingInterrupts;
 	KUInt32* pcPtr = &ioCPU->mCurrentRegisters[TARMProcessor::kR15];

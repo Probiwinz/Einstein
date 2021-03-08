@@ -39,18 +39,6 @@
 #include <K/Defines/KDefinitions.h>
 #include <K/Exceptions/TException.h>
 
-//#define T_ERROR(args...) \
-//  TError(__FILE__, __LINE__, args)
-
-enum class TErrId {
-    kOK,
-};
-
-enum class TErrExt {
-    kNone,
-    kErrno
-};
-
 ///
 /// Class for errors.
 ///
@@ -76,10 +64,6 @@ public:
 	TError(
 			const char* inFileName,
 			KUInt32 inLine );
-
-    TError(const char *inFileName, KUInt32 inLine, TErrId inErrId, TErrExt ext, const char *fmt, ... );
-
-    TError(const char *inFileName, KUInt32 inLine, TErrId inErrId, const char *fmt, ... );
 
 	///
 	/// Destructeur.

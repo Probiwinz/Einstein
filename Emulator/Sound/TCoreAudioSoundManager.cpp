@@ -323,7 +323,7 @@ TCoreAudioSoundManager::StopOutput( void )
 // -------------------------------------------------------------------------- //
 //  * OutputIsRunning( void )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TCoreAudioSoundManager::OutputIsRunning( void )
 {
 	return !mOutputBuffer->IsEmpty();

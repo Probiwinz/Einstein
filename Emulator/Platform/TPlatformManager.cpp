@@ -121,10 +121,10 @@ KUInt32 TPlatformManager::GetVersion()
 // -------------------------------------------------------------------------- //
 //  * GetNextEvent( KUInt32 )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TPlatformManager::GetNextEvent( KUInt32 outEventPAddr )
 {
-	bool theResult = false;
+	Boolean theResult = false;
 
 	mMutex->Lock();
 
@@ -183,10 +183,10 @@ TPlatformManager::GetNextEvent( KUInt32 outEventPAddr )
 // -------------------------------------------------------------------------- //
 //  * DisposeBuffer( KUInt32 )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TPlatformManager::DisposeBuffer( KUInt32 inID )
 {
-	bool theResult = false;
+	Boolean theResult = false;
 
 	mMutex->Lock();
 
@@ -220,14 +220,14 @@ TPlatformManager::DisposeBuffer( KUInt32 inID )
 // -------------------------------------------------------------------------- //
 //  * CopyBufferData( KUInt32, KUInt32, KUInt32, KUInt32 )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TPlatformManager::CopyBufferData(
 						KUInt32 inID,
 						KUInt32 outVAddress,
 						KUInt32 inOffset,
 						KUInt32 inAmount)
 {
-	bool theResult = false;
+	Boolean theResult = false;
 
 	mMutex->Lock();
 
@@ -354,7 +354,7 @@ int TPlatformManager::InsertPCCard(KUInt32 inSLot, TPCMCIACard* inCard)
 	TPCMCIAController* controller = mMemory->GetPCMCIAController(inSLot);
 	if (!controller) return -1;
 
-	bool doPause = (controller->CurrentCard()!=nullptr) && (inCard!=nullptr);
+	Boolean doPause = (controller->CurrentCard()!=nullptr) && (inCard!=nullptr);
 
 	if (controller->CurrentCard()) {
 		controller->RemoveCard();

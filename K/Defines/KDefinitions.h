@@ -45,7 +45,7 @@
 /// par TARGET_OS_XXX.
 ///
 /// Ce qui est définit ici:
-/// bool		(taille quelconque, sur certaines plateformes, un mot
+/// Boolean		(taille quelconque, sur certaines plateformes, un mot
 ///				de 32 bits est plus efficace qu'un octet)
 /// false et true (normalement définis par le compilateur C++)
 /// KUInt64		un entier non signé de 64 bits
@@ -243,6 +243,23 @@
 		#define TARGET_OS_COMPAT_POSIX 1
 		#undef	TARGET_OS_UNDEFINED
 		
+		// MacOS X could be on x86 or on ppc
+		#if (defined (__ppc__) || defined (__ppc64__))
+			#define TARGET_OS_OPENSTEP_PPC 1
+            #define TARGET_OS_OPENSTEP_I386 0
+            #define TARGET_OS_OPENSTEP_ARM 0
+        #elif (defined (__i386__) || defined (__x86_64__))
+            #define TARGET_OS_OPENSTEP_PPC 0
+            #define TARGET_OS_OPENSTEP_I386 1
+            #define TARGET_OS_OPENSTEP_ARM 0
+        #elif (defined (__arm__) || defined (__arm64__))
+             #define TARGET_OS_OPENSTEP_PPC 0
+             #define TARGET_OS_OPENSTEP_I386 0
+             #define TARGET_OS_OPENSTEP_ARM 1
+        #else
+			#error "Unknown MacOS X architecture"
+		#endif
+
 	#else
 		#define TARGET_OS_ANDROID 0
 		#define TARGET_OS_BEOS 0
@@ -260,7 +277,7 @@
 	#endif
 
 	#if TARGET_OS_MACOS
-//		#include <MacTypes.h>
+		#include <MacTypes.h>
 	#endif
 	
 	#if TARGET_OS_OPENSTEP
@@ -525,9 +542,13 @@ typedef	uint16_t	KUInt16;
 typedef	int16_t		KSInt16;
 typedef uint8_t     KUInt8;
 typedef	int8_t		KSInt8;
+#if !defined(TARGET_OS_MAC)
+typedef	bool		Boolean;
+#endif
 typedef uintptr_t   KUIntPtr;
 
 #if TARGET_OS_WIN32
+typedef	bool		Boolean;
 typedef signed long ssize_t;
 #endif
 
@@ -536,6 +557,23 @@ static_assert(sizeof(KUInt16)==2, "Size of KUInt16 must be 2 bytes");
 static_assert(sizeof(KUInt32)==4, "Size of KUInt32 must be 4 bytes");
 static_assert(sizeof(KUInt64)==8, "Size of KUInt64 must be 8 bytes");
 static_assert(sizeof(KUIntPtr)==sizeof(void*), "Size of KUIntPtr must the same as the size of a pointer");
+
+
+// ---- Use this a simple printf() replacement.
+//      This is useful for platforms that don't support stdio out of the box.
+//      It is located in this file to make it universally available without extra #include's
+#ifdef _DEBUG
+#  ifdef _MSC_VER
+     // KPrintf is implemented in TTraceMonitor.cpp
+     extern void KPrintf(const char* format, ...);
+#  else // _MSC_VER
+#    define KPrintf(...) fprintf(stderr, __VA_ARGS__)
+#  endif // _MSC_VER
+#else // _DEBUG
+   // Make sure that the trailing semicolon is used up, the compiler will optimize this away
+#  define KPrintf(...) do {} while(0)
+#endif // _DEBUG
+
 
 #endif
 		// __KDEFINITIONS__

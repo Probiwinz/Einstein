@@ -96,7 +96,7 @@ public:
 	///
 	/// Determine if the thread is the current thread.
 	///
-	bool IsCurrentThread( void ) const;
+	Boolean IsCurrentThread( void ) const;
 
 	///
 	/// Suspend the thread.
@@ -119,7 +119,7 @@ public:
 	/// \param inMillisecs		time to sleep.
 	/// \return	\c true if we slept all the time, \c false otherwise.
 	///
-	bool Sleep( KUInt32 inMilliseconds = kForever );
+	Boolean Sleep( KUInt32 inMilliseconds = kForever );
 
 	///
 	/// Wakes the thread up.

@@ -165,15 +165,15 @@ Translate_PatchNativeCall(
 					KUInt32 inInstruction,
 					KUInt32 inVAddr )
 {
-    KUInt32 ix = TJITGenericPatchObject::GetIndex(inInstruction);
-    TJITGenericPatchObject* patchObject = TJITGenericPatchManager::GetPatchAt(ix);
-    if (patchObject == NULL) {
-        // This patch doesn't exist, we're probably trying to translate data.
-        return inInstruction;
-    }
-    PUSHFUNC(CallPatchNative);
-    PUSHVALUE(ix);
-    return patchObject->GetOriginalInstruction();
+	KUInt32 ix = TJITGenericPatchObject::GetIndex(inInstruction);
+	TJITGenericPatchObject* patchObject = TJITGenericPatchManager::GetPatchAt(ix);
+	if (patchObject == NULL) {
+		// This patch doesn't exist, we're probably trying to translate data.
+		return inInstruction;
+	}
+	PUSHFUNC(CallPatchNative);
+	PUSHVALUE(ix);
+	return patchObject->GetOriginalInstruction();
 }
 
 

@@ -33,7 +33,6 @@
 #endif
 
 // K
-#include <K/Trace.h>
 #include <K/Streams/TStream.h>
 
 // Einstein
@@ -356,7 +355,7 @@ TNativePrimitives::ExecuteFlashDriverNative( KUInt32 inInstruction )
 				// MP2100D			0001E3C8	0001E3E0
 				// MP2x00US			0001E3BC	0001E3D4
 				// EM300			0001E168	0001E180
-				bool is32bits =
+				Boolean is32bits =
 					(virtualTable == 0x0001E3D4)
 					|| (virtualTable == 0x0001E3E0)
 					|| (virtualTable == 0x0001E180);
@@ -372,7 +371,7 @@ TNativePrimitives::ExecuteFlashDriverNative( KUInt32 inInstruction )
 						is32bits ? "32bits" : "16bits" );
 				}
 #endif
-				bool theResult;
+				Boolean theResult;
 				if (is32bits)
 				{
 					theResult = mMemory->WriteToFlash32Bits(
@@ -409,7 +408,7 @@ TNativePrimitives::ExecuteFlashDriverNative( KUInt32 inInstruction )
 				// MP2100D			0001E3C8	0001E3E0
 				// MP2x00US			0001E3BC	0001E3D4
 				// EM300			0001E168	0001E180
-				bool is32bits =
+				Boolean is32bits =
 					(virtualTable == 0x0001E3D4)
 					|| (virtualTable == 0x0001E3E0)
 					|| (virtualTable == 0x0001E180);
@@ -423,7 +422,7 @@ TNativePrimitives::ExecuteFlashDriverNative( KUInt32 inInstruction )
 						is32bits ? "32bits" : "16bits" );
 				}
 #endif
-				bool theResult;
+				Boolean theResult;
 				if (is32bits)
 				{
 					theResult = mMemory->EraseFlash(
@@ -541,7 +540,7 @@ TNativePrimitives::ExecuteFlashDriverNative( KUInt32 inInstruction )
 						(unsigned int) mProcessor->GetRegister( 2 ) );
 				}
 #endif
-				bool theResult = mMemory->EraseFlash(
+				Boolean theResult = mMemory->EraseFlash(
 						(unsigned int) mProcessor->GetRegister( 1 ),
 						(unsigned int) mProcessor->GetRegister( 2 ));
 				
@@ -818,7 +817,7 @@ TNativePrimitives::ExecutePlatformDriverNative( KUInt32 inInstruction )
 			{
 				KUInt32 theWiredAddress;
 				(void) mMemory->TranslateW( mProcessor->GetRegister(1), theWiredAddress );
-				bool gotSomeEvent =
+				Boolean gotSomeEvent =
 						mPlatformManager->GetNextEvent( theWiredAddress );
 				mProcessor->SetRegister( 0, gotSomeEvent );
 			}
@@ -892,7 +891,7 @@ TNativePrimitives::ExecutePlatformDriverNative( KUInt32 inInstruction )
 				char theLine[512];
 				KUInt32 amount = sizeof(theLine);
 				(void)mMemory->FastReadString(theAddress, &amount, theLine);
-				::KTrace("Log: %s\n", theLine);
+				KPrintf("Log: %s\n", theLine);
 			}
 		}
 			break;
@@ -1938,7 +1937,7 @@ TNativePrimitives::ExecuteTabletDriverNative( KUInt32 inInstruction )
 //				mEmulator->BreakInMonitor();
 				KUInt32 theSampleRecord = 0;
 				KUInt32 theSampleTime = 0;
-				bool gotSomeSample =
+				Boolean gotSomeSample =
 					mScreenManager->GetSample(&theSampleRecord, &theSampleTime);
 				if (gotSomeSample)
 				{

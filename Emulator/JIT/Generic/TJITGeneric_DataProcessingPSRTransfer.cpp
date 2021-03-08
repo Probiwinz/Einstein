@@ -242,11 +242,11 @@ Translate_DataProcessingPSRTransfer(
                     KUInt32 inInstruction,
                     KUInt32 inVAddr )
 {
-    const bool theFlagS = (inInstruction & 0x00100000) != 0;
+    const Boolean theFlagS = (inInstruction & 0x00100000) != 0;
     KUInt32 theMode;
     KUInt32 thePushedValue;
-    bool doPush = true;
-    bool doPushPC = false;
+    Boolean doPush = true;
+    Boolean doPushPC = false;
     if (inInstruction & 0x02000000)
     {
         KUInt32 theImmValue = inInstruction & 0xFF;

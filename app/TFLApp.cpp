@@ -171,7 +171,6 @@ Developer's Documentation: Basic Ideas, Basic Features, Detailed Class Reference
  */
 
 #include <K/Defines/KDefinitions.h>
-#include <K/Trace.h>
 
 #include "TFLApp.h"
 #include "TFLAppUI.h"
@@ -310,14 +309,14 @@ TFLApp::Run( int argc, char* argv[] )
 #endif
 
     int ramSize = mFLSettings->RAMSize;
-    bool hidemouse = (bool)mFLSettings->hideMouse;
+    Boolean hidemouse = (Boolean)mFLSettings->hideMouse;
 
-    ::KTrace( "Welcome to Einstein console.\n" );
-    ::KTrace( "This is %s.\n", VERSION_STRING );
+    KPrintf( "Welcome to Einstein console.\n" );
+    KPrintf( "This is %s.\n", VERSION_STRING );
 
     static char theROMImagePath[FL_PATH_MAX];
 
-    for (bool firstAttempt=true;;firstAttempt=false) {
+    for (Boolean firstAttempt=true;;firstAttempt=false) {
         if (!firstAttempt || !mFLSettings->dontShow)
             mFLSettings->ShowSettingsPanelModal();
         strncpy(theROMImagePath, mFLSettings->ROMPath, FL_PATH_MAX);
@@ -751,7 +750,7 @@ int TFLApp::UserActionKeepPCCardInSlot(int inSlot, int inIndex)
 /**
  This is called by the screen manager when the state of the backlight changed.
  */
-void TFLApp::PowerChangedEvent(bool inState)
+void TFLApp::PowerChangedEvent(Boolean inState)
 {
     // we have a hidden button in the FLuid file that does nothing but keep
     // track of the "on" image.
@@ -776,7 +775,7 @@ void TFLApp::PowerChangedEvent(bool inState)
 /**
  This is called by the screen manager when the state of the backlight changed.
  */
-void TFLApp::BacklightChangedEvent(bool inState)
+void TFLApp::BacklightChangedEvent(Boolean inState)
 {
     // we have a hidden button in the FLuid file that does nothing but keep
     // track of the "on" image.
@@ -973,7 +972,7 @@ void TFLApp::InitMonitor(const char *theROMImagePath)
     fl_filename_setext(theSymbolListPath, FL_PATH_MAX, ".symbols");
     mSymbolList = new TSymbolList(theSymbolListPath);
     mMonitor = new TFLMonitor((TBufferLog*)mLog, mEmulator, mSymbolList, theROMImagePath);
-    ::KTrace("Booting... (Monitor enabled)\n");
+    KPrintf("Booting... (Monitor enabled)\n");
 }
 
 
@@ -1002,7 +1001,7 @@ TFLApp::CreateLog( const char* inFilePath )
 {
     if (mLog)
     {
-        ::KTrace( "A log already exists (--monitor & --log are exclusive)\n" );
+        KPrintf( "A log already exists (--monitor & --log are exclusive)\n" );
         ::exit(1);
     }
     mLog = new TFileLog( inFilePath );
@@ -1020,11 +1019,11 @@ void TFLApp::CreateScreenManager(
                                  const char* inClass,
                                  int inPortraitWidth,
                                  int inPortraitHeight,
-                                 bool inFullScreen)
+                                 Boolean inFullScreen)
 {	
     if (::strcmp( inClass, "FL" ) == 0)
     {
-        bool screenIsLandscape = true;
+        Boolean screenIsLandscape = true;
 
         KUInt32 theWidth;
         KUInt32 theHeight;
@@ -1128,7 +1127,7 @@ T_ROM_INJECTION(0x001B37FC, 0x001B5CD4, 0x001A1660, "AddClipboard__9TRootViewFRC
     int nData = (int)TNewt::RefArrayGetNumSlots(data);
 
     std::string clipboardText = "";
-    bool firstText = true;
+    Boolean firstText = true;
     for (int i=0; i<nData; i++) {
         NewtRef dataSet = TNewt::RefArrayGetSlot(data, i);
 //        TNewt::PrintRef(dataSet, 8);
@@ -1161,7 +1160,7 @@ T_ROM_INJECTION(0x001B37FC, 0x001B5CD4, 0x001A1660, "AddClipboard__9TRootViewFRC
 
 static void clip_callback(int source, void *data) {
     if ( source == 1 ) {
-        ::KTrace("Clipboard: \"%s\"\n", (char*)data);
+        KPrintf("Clipboard: \"%s\"\n", (char*)data);
     }
 }
 
@@ -1181,14 +1180,14 @@ static void tabs_box(int x, int y, int w, int h, Fl_Color c)
     fl_rectf(x, y+barHgt, w, h-barHgt, c);
 }
 
-static const char *tfl_file_chooser(const char *message, const char *pat, const char *fname, bool save)
+static const char *tfl_file_chooser(const char *message, const char *pat, const char *fname, Boolean save)
 {
 #if 0
     char pattern[FL_PATH_MAX]; pattern[0] = 0;
     if (pat) {
         const char *s = pat;
         char *d = pattern;
-        bool brackets = false;
+        Boolean brackets = false;
         while (*s) {
             char c = *s++;
             if (c=='\t') {

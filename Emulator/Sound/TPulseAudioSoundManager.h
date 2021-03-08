@@ -77,7 +77,7 @@ public:
 	///
 	/// Is output running?
 	///
-	bool	OutputIsRunning( void ) override;
+	Boolean	OutputIsRunning( void ) override;
 
     ///
     /// Method called to signal a change in the output volume.
@@ -134,7 +134,7 @@ private:
     pa_mainloop_api*        mPAMainLoopAPI;
     pa_context*             mPAContext;
     TMutex*                 mDataMutex;
-	bool			        mOutputIsRunning;
+	Boolean			        mOutputIsRunning;
 };
 
 #endif

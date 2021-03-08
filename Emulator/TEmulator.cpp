@@ -38,7 +38,6 @@
 #endif
 
 // K
-#include <K/Trace.h>
 #include <K/Streams/TStream.h>
 #include <K/Streams/TFileStream.h>
 
@@ -264,7 +263,7 @@ TEmulator::SystemBootUND( KUInt32 inPAddr )
 	if (mLog)
 	{
 		KUInt8 theString[] = "SystemBoot";
-		::KTrace("%s\n", theString);
+		KPrintf("%s\n", theString);
 		mLog->LogLine( (const char*) theString );
 	}
 }
@@ -295,7 +294,7 @@ TEmulator::DebuggerUND( KUInt32 inPAddr )
 			}
 		} while (theString[index++] != 0);
 
-		::KTrace("%s\n", theString);
+		KPrintf("%s\n", theString);
 		mLog->LogLine( (const char*) theString );
 	}
 }

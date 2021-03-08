@@ -91,7 +91,7 @@ HalfwordAndSignedDataTransferReg_Template(BITS_FLAGS, Rn, Rd)
 			ioCPU->DataAbort();
 			MMUCALLNEXT_AFTERSETPC;
 		}
-		theData = highData << 8 | lowData;
+		theData = (highData << 8) | lowData;
 	#elif !FLAG_H
 	    // Signed byte
 		KUInt8 signedByte;

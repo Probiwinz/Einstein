@@ -55,7 +55,7 @@ TTask::Run( void )
 // -------------------------------------------------------------------------- //
 //  * IsCurrentTask( void ) const
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TTask::IsCurrentTask( void ) const
 {
 	return mThread->IsCurrentThread();

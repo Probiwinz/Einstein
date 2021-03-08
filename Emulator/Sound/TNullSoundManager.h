@@ -70,11 +70,11 @@ public:
 	///
 	/// Is output running?
 	///
-	virtual bool	OutputIsRunning( void );
+	virtual Boolean	OutputIsRunning( void );
 
 private:
 	/// \name Variables
-	bool			mOutputIsRunning;
+	Boolean			mOutputIsRunning;
 };
 
 #endif

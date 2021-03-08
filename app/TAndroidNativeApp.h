@@ -194,7 +194,7 @@ private:
             const char* inClass,
             int inPortraitWidth,
             int inPortraitHeight,
-            bool inFullScreen);
+            Boolean inFullScreen);
 
     ///
     /// Cr�e le log.
@@ -235,7 +235,7 @@ private:
     ///
     /// \return true if the command was known.
     ///
-    bool ExecuteCommand( const char* inCommand );
+    Boolean ExecuteCommand( const char* inCommand );
 
     ///
     /// Affiche l'aide (du menu)
@@ -256,7 +256,7 @@ private:
     TPlatformManager*	mPlatformManager;	///< Reference to the platform manager.
     TLog*				mLog;				///< Log.
     TNetworkManager*	mNetworkManager;	///< network connection
-    bool				mQuit;				///< If we should quit.
+    Boolean				mQuit;				///< If we should quit.
 
     KUInt32				mNewtonID0, mNewtonID1;
 };

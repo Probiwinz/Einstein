@@ -125,7 +125,7 @@ class Fl_Newton_Screen_Widget : public Fl_Box
     TFLApp              *mApp = nullptr;
 	int					rgbWidth_, rgbHeight_;
 	int					penX, penY, penIsDown;
-    bool                mPowerState = false;
+	Boolean             mPowerState = false;
 
 public:
 	Fl_Newton_Screen_Widget(int x, int y, int w, int h, const char *l, TFLScreenManager *s, TFLApp *inApp)
@@ -324,7 +324,7 @@ public:
 
 	unsigned int eventKeyToMac() {
 		unsigned int fltk = Fl::event_key();
-//		::KTrace("Event key %d %c\n", fltk, fltk);
+//		KPrintf("Event key %d %c\n", fltk, fltk);
 		if (fltk<256 && isalpha(fltk))
 			fltk = toupper(fltk);
 		int a = 0;
@@ -332,7 +332,7 @@ public:
 		while (a < b) {
 			int c = (a+b)/2;
 			if (vktab[c].fltk == fltk) {
-//				::KTrace("  returns %d 0x%02x\n", vktab[c].vk, vktab[c].vk);
+//				KPrintf("  returns %d 0x%02x\n", vktab[c].vk, vktab[c].vk);
 				return vktab[c].vk;
 			}
 			if (vktab[c].fltk < fltk) a = c+1; else b = c;
@@ -359,7 +359,7 @@ public:
 		switch (event) {
 			case FL_PUSH:
 				screenManager_->PenDown(penXPos(), penYPos());
-                //::KTrace("%d %d\n", penXPos(), penYPos());
+                //KPrintf("%d %d\n", penXPos(), penYPos());
 				penIsDown = true;
 				Fl::add_timeout(screenManager_->GetTabletSampleRate()/4000000.0, penDownTimerCB, this);
 				return 1;
@@ -516,9 +516,10 @@ TFLScreenManager::TFLScreenManager(
 			TLog* inLog /* = nil */,
 			KUInt32 inPortraitWidth /* = kDefaultPortraitWidth */,
 			KUInt32 inPortraitHeight /* = kDefaultPortraitHeight */,
-			bool inFullScreen /* = false */,
-			bool inScreenIsLandscape /* = true */)
-:	TScreenManager(
+			Boolean inFullScreen /* = false */,
+			Boolean inScreenIsLandscape /* = true */)
+	:
+		TScreenManager(
 		inLog,
 		inPortraitWidth,
 		inPortraitHeight,
@@ -612,10 +613,10 @@ TFLScreenManager::PowerOffScreen( void )
 }
 
 // -------------------------------------------------------------------------- //
-//  * BacklightChanged( bool )
+//  * BacklightChanged( Boolean )
 // -------------------------------------------------------------------------- //
 void
-TFLScreenManager::BacklightChanged( bool inState)
+TFLScreenManager::BacklightChanged( Boolean inState )
 {
     gApp->BacklightChangedEvent(inState);
 	UpdateScreenRect(0L);

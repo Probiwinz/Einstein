@@ -203,7 +203,7 @@ public:
 	///
 	/// \return \c true if we are.
 	///
-	inline bool	IsBPHalted( void )
+	inline Boolean	IsBPHalted( void )
 		{
 			return mBPHalted;
 		}
@@ -213,7 +213,7 @@ public:
 	///
 	/// \return \c true if we are.
 	///
-	inline bool	IsInterrupted( void )
+	inline Boolean	IsInterrupted( void )
 		{
 			return mInterrupted;
 		}
@@ -233,7 +233,7 @@ public:
 	///
 	/// \return \c true if we are.
 	///
-	inline bool	IsPaused( void )
+	inline Boolean	IsPaused( void )
 		{
 			return mPaused;
 		}
@@ -243,7 +243,7 @@ public:
 	///
 	/// \return \c true if we are.
 	///
-	inline bool	IsRunning( void )
+	inline Boolean	IsRunning( void )
 		{
 			return mRunning;
 		}
@@ -427,7 +427,7 @@ private:
 	KUInt32				mNewtonID[2];		///< NewtonID (48 bits, 16+32).
 	TLog*				mLog;				///< Interface for logging.
 	TMonitor*			mMonitor;			///< Monitor (or \c nil).
-	bool				mSignal;			///< Signal for JIT (if we're running).
+	Boolean				mSignal;			///< Signal for JIT (if we're running).
 	KUInt32				mInterrupted;		///< We got a (processor) interrupt.
 	KUInt32				mRunning;			///< If we're running.
 	KUInt32				mPaused;			///< If we're paused (until next interrupt).

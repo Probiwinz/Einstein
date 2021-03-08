@@ -18,7 +18,6 @@
 // ==============================
 
 #include <K/Defines/KDefinitions.h>
-#include <K/Trace.h>
 
 #include "Emulator/JIT/JIT.h"
 
@@ -256,7 +255,7 @@ void TJITGenericPatch::Apply(KUInt32 *ROM, KSInt32 inROMId)
 {
     KUInt32 offset = GetOffsetInROM(inROMId);
     if (offset!=kROMPatchVoid) {
-        ::KTrace("Applying generig patch at 0x%08X: %s\n", offset*4, GetName());
+        KPrintf("Applying generig patch at 0x%08X: %s\n", offset*4, GetName());
         SetOrigialInstruction(ROM[offset]);
         ROM[offset] = GetNewInstruction();
     }
@@ -300,7 +299,7 @@ void TJITGenericPatchFindAndReplace::Apply(KUInt32 *ROM, KSInt32 inROMId)
     if (offset==kROMPatchVoid)
         return;
 
-    ::KTrace("Applying find-and-replace patch at 0x%08X: %s\n", offset*4, GetName());
+    KPrintf("Applying find-and-replace patch at 0x%08X: %s\n", offset*4, GetName());
 
     KUInt32 keyLen = mKey[0];
     if (memcmp(ROM+offset, mKey+1, keyLen*4)!=0) {
@@ -328,7 +327,7 @@ void TJITGenericPatchNativeCall::Apply(KUInt32 *ROM, KSInt32 inROMId)
 {
     KUInt32 offset = GetOffsetInROM(inROMId);
     if (offset!=kROMPatchVoid) {
-        ::KTrace("Applying native call patch at 0x%08X: %s\n", offset*4, GetName());
+        KPrintf("Applying native call patch at 0x%08X: %s\n", offset*4, GetName());
         SetOrigialInstruction(ROM[offset]);
         ROM[offset] = kSWINativeCall|GetIndex();
     }
@@ -363,7 +362,7 @@ void TJITGenericPatchNativeInjection::Apply(KUInt32 *ROM, KSInt32 inROMId)
 {
     KUInt32 offset = GetOffsetInROM(inROMId);
     if (offset!=kROMPatchVoid) {
-        ::KTrace("Applying native injection patch at 0x%08X: %s\n", offset*4, GetName());
+        KPrintf("Applying native injection patch at 0x%08X: %s\n", offset*4, GetName());
         SetOrigialInstruction(ROM[offset]);
         ROM[offset] = kSWINativeInjection | GetIndex();
     }

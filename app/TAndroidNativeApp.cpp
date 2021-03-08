@@ -277,7 +277,7 @@ TAndroidNativeApp::Run(const char *dataPath, int newtonScreenWidth, int newtonSc
     mSoundManager = new TAndroidNativeSoundManager(mLog);
     if (mLog) mLog->FLogLine("    OK: 0x%08x", (intptr_t)mSoundManager);
 
-    bool isLandscape = false;
+    Boolean isLandscape = false;
     if (mLog) mLog->FLogLine("  mScreenManager");
     mScreenManager = new TAndroidNativeScreenManager(mLog,
                                                      (KUInt32)newtonScreenWidth, (KUInt32)newtonScreenHeight,
@@ -1289,7 +1289,7 @@ void TAndroidNativeActivity::createEmulator()
 
     // Show or hide Android status bar. Note that this must take place before we call setContentView
     //requestWindowFeature(Window.FEATURE_NO_TITLE);
-    //final bool statusBarVisible = sharedPrefs.getBoolean("androidstatusbar", true);
+    //final boolean statusBarVisible = sharedPrefs.getBoolean("androidstatusbar", true);
     //updateFullscreenStatus(statusBarVisible);
     //setContentView(einsteinView);
 

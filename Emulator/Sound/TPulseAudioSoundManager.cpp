@@ -36,7 +36,6 @@
 #include <string.h>
 
 // K
-#include <K/Trace.h>
 #include <K/Threads/TMutex.h>
 
 // Einstein.
@@ -176,9 +175,9 @@ TPulseAudioSoundManager::TPulseAudioSoundManager( TLog* inLog /* = nil */ )
         }
     } else {
         if (mPAContext) {
-            ::KTrace("TPulseAudioSoundManager: %s: %s\n", errorText, pa_context_errno(mPAContext));
+            KPrintf("TPulseAudioSoundManager: %s: %s\n", errorText, pa_context_errno(mPAContext));
         } else {
-            ::KTrace("TPulseAudioSoundManager: %s.\n", errorText);
+            KPrintf("TPulseAudioSoundManager: %s.\n", errorText);
         }
     }
     if (mPAMainLoop) {
@@ -357,10 +356,10 @@ TPulseAudioSoundManager::StopOutput( void )
 // -------------------------------------------------------------------------- //
 //  * OutputIsRunning( void )
 // -------------------------------------------------------------------------- //
-bool
+Boolean
 TPulseAudioSoundManager::OutputIsRunning( void )
 {
-    bool streamCorked = (bool)pa_stream_is_corked(mOutputStream);
+    Boolean streamCorked = (Boolean)pa_stream_is_corked(mOutputStream);
 #ifdef DEBUG_SOUND
     if (GetLog()) {
         GetLog()->FLogLine("   *****  OutputIsRunning: (PA Stream Corked? %s) (mOutputIsRunning? %s)",

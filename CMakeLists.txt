@@ -270,8 +270,6 @@ set ( sources
 	K/Unicode/UUTF16Conv.cpp
 	K/Unicode/UUTF16Conv.h
 	K/Unicode/UnicodeDefinitions.h
-	K/Trace.cpp
-	K/Trace.h
 	Monitor/TFLMonitor.cpp
 	Monitor/TFLMonitor.h
 	Monitor/TMonitor.cpp

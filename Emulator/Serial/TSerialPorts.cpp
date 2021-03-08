@@ -149,7 +149,7 @@ TSerialPortManager *TSerialPorts::ReplaceDriver(EPortIndex inPort, EDriverID inD
 			if (mLog)
     			mLog->FLogLine("ERROR: request for unsupported serial driver type %d on port %d\n", inDriverId, inPort);
 			else
-			    fprintf(stderr, "ERROR: request for unsupported serial driver type %d on port %d\n", inDriverId, inPort);
+			    KPrintf("ERROR: request for unsupported serial driver type %d on port %d\n", inDriverId, inPort);
     }
 	mDriver[inPort] = currentDriver;
 

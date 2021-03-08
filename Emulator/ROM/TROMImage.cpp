@@ -421,7 +421,7 @@ void fl_filename_setext(char *buf, int size, const char *ext)
 }
 #endif
 
-TROMImage *TROMImage::LoadROMAndREX(const char *theROMImagePath, bool useMonitor, bool useBuiltinERex)
+TROMImage *TROMImage::LoadROMAndREX(const char *theROMImagePath, Boolean useMonitor, Boolean useBuiltinERex)
 {
     TROMImage *theROMImage = nullptr;
 

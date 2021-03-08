@@ -64,7 +64,7 @@ public:
 	///
 	/// Return true, if the card is currently inserted
 	/// 
-	bool IsInserted() { return (mPCMCIAController != nullptr);  }
+	Boolean IsInserted() { return (mPCMCIAController != nullptr);  }
 
 	///
 	/// Get PCMCIA pins.

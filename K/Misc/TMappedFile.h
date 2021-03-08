@@ -128,7 +128,7 @@ public:
 	///
 	/// \return \c true if the file was created/grown, \c false otherwise.
 	///
-	bool	GetCreated( void ) const
+	Boolean	GetCreated( void ) const
 		{
 			return mCreated;
 		}
@@ -156,9 +156,9 @@ private:
 	/// \name Variables
 	void*		mBuffer = nullptr;	///< Buffer to access the file.
 	size_t		mSize = 0;			///< Size of the file.
-	bool		mMapped = false;	///< If file is actually mapped.
-	bool		mReadOnly = false;	///< If file is read only.
-	bool		mCreated = false;	///< Whether the file was created/grown.
+	Boolean		mMapped = false;	///< If file is actually mapped.
+	Boolean		mReadOnly = false;	///< If file is read only.
+	Boolean		mCreated = false;	///< Whether the file was created/grown.
 	int			mFileFd = -1;		///< fd to the file.
 };
 
