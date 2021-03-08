@@ -29,8 +29,6 @@
 #include "Emulator/Log/TLog.h"
 #include "Emulator/PCMCIA/TPCMCIAController.h"
 
-#include <K/Trace.h>
-
 #if TARGET_OS_WIN32
 # include <Winsock2.h>
 #else
@@ -45,7 +43,7 @@
 using namespace std::chrono_literals;
 
 #define AsyncTrace(...)
-//#define AsyncTrace ::KTrace
+//#define AsyncTrace KPrintf
 
 
 // -------------------------------------------------------------------------- //
@@ -449,10 +447,10 @@ TLinearCard::WriteMem( KUInt32 inOffset, KUInt32 inValue )
 //    const char *states[] = {
 //        "Read", "Status", "Write", "Erase"
 //    };
-//    ::KTrace("TFlashWrite: pc: %08x  lr: %08x\n",
+//    KPrintf("TFlashWrite: pc: %08x  lr: %08x\n",
 //           GetPCMCIAController()->GetEmulator()->GetProcessor()->GetRegister(15),
 //           GetPCMCIAController()->GetEmulator()->GetProcessor()->GetRegister(14));
-//    ::KTrace("TFlashWrite: a:%08x v:%08x, current:%08x, flags:%08x %s\n", inOffset, inValue, v, p, states[mState]);
+//    KPrintf("TFlashWrite: a:%08x v:%08x, current:%08x, flags:%08x %s\n", inOffset, inValue, v, p, states[mState]);
 
 	if (GetLog())
 	{
@@ -518,10 +516,10 @@ TLinearCard::WriteMemB( KUInt32 inOffset, KUInt8 inValue )
 //    const char *states[] = {
 //        "Read", "Status", "Write", "Erase"
 //    };
-//    ::KTrace("TFlashWriteB: pc: %08x  lr: %08x\n",
+//    KPrintf("TFlashWriteB: pc: %08x  lr: %08x\n",
 //           GetPCMCIAController()->GetEmulator()->GetProcessor()->GetRegister(15),
 //           GetPCMCIAController()->GetEmulator()->GetProcessor()->GetRegister(14));
-//    ::KTrace("TFlashWriteB: a:%08x v:%02x, current:%02x, flags:%08x %s\n", inOffset, inValue, v, p, states[mState]);
+//    KPrintf("TFlashWriteB: a:%08x v:%02x, current:%02x, flags:%08x %s\n", inOffset, inValue, v, p, states[mState]);
 
 	if (GetLog())
 	{

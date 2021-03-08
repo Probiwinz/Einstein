@@ -86,8 +86,6 @@
  
  */
 
-#include <K/Trace.h>
-
 #include "TUsermodeNetwork.h"
 #include "Emulator/Log/TLog.h"
 
@@ -527,7 +525,7 @@ public:
 
 		// SYN-ACK packet should have ACK set to client SEQ + 1
 		mNewtonPacketsSeq = packet.GetTCPSeq() + 1;
-		::KTrace("Net: Adding TCP handler for port %u to %u.%u.%u.%u\n",
+		KPrintf("Net: Adding TCP handler for port %u to %u.%u.%u.%u\n",
 			   theirPort,
 			   (unsigned int)((theirIP>>24)&0xff), 
 			   (unsigned int)((theirIP>>16)&0xff), 
@@ -662,14 +660,14 @@ public:
 				// if there was a timout, ::select returns 0
 				// if the connection was established, ::select returns 1
             } else {
-				::KTrace("TTCPPacketHandler::connect: Can't connect (%d.%d.%d.%d:%d): %s\n", 
+				KPrintf("TTCPPacketHandler::connect: Can't connect (%d.%d.%d.%d:%d): %s\n", 
 					theirIP>>24, (theirIP >> 16) & 255, (theirIP >> 8) & 255, theirIP & 255, theirPort,
 					strerror(errno));
 				return -1;
 			}
 			// No connection could be established
 			if (err==-1 || err==0) { // error or timeout
-				::KTrace("TTCPPacketHandler::connect: Can't connect (::select) (%d.%d.%d.%d:%d): %s\n",
+				KPrintf("TTCPPacketHandler::connect: Can't connect (::select) (%d.%d.%d.%d:%d): %s\n",
 					theirIP >> 24, (theirIP >> 16) & 255, (theirIP >> 8) & 255, theirIP & 255, theirPort,
 					strerror(errno));
                 return -1;
@@ -750,7 +748,7 @@ public:
 				// Just close down.
 				// FIXME: we assume that this is an ACK packet
 				net->RemovePacketHandler(this);
-				::KTrace("Net: Newton closed. Removing TCP handler for port %u to %u.%u.%u.%u\n",
+				KPrintf("Net: Newton closed. Removing TCP handler for port %u to %u.%u.%u.%u\n",
 					   theirPort,
 					   (unsigned int)((theirIP>>24)&0xff),
 					   (unsigned int)((theirIP>>16)&0xff),
@@ -773,7 +771,7 @@ public:
 					::close(mSocket); mSocket = -1;
 #endif
 					net->RemovePacketHandler(this);
-					::KTrace("Net: Peer closing. Removing TCP handler for port %u to %u.%u.%u.%u\n",
+					KPrintf("Net: Peer closing. Removing TCP handler for port %u to %u.%u.%u.%u\n",
 						   theirPort,
 						   (unsigned int)((theirIP>>24)&0xff),
 						   (unsigned int)((theirIP>>16)&0xff),
@@ -784,7 +782,7 @@ public:
 				}
 				return 1;
 			default:
-				::KTrace("---> TCP send: unsupported state in 'send()'\n");
+				KPrintf("---> TCP send: unsupported state in 'send()'\n");
 				break;
 		}
 		return -1;
@@ -826,7 +824,7 @@ public:
 					state = kStatePeerDiscWaitForACK;
 					break;
 				} else if (avail>0) {
-					::KTrace("Net: W>E N Data %d bytes (TCP)\n", (int) avail);
+					KPrintf("Net: W>E N Data %d bytes (TCP)\n", (int) avail);
 					//if (avail>200) avail = 200;
 					Packet *reply = NewPacket(avail);
 					// /*ssize_t n =*/ ::recv(mSocket, reply->GetTCPPayloadStart(), avail, 0);
@@ -904,7 +902,7 @@ public:
 		theirMAC = packet.GetDstMAC();
 		theirIP = packet.GetIPDstIP();
 		theirPort = packet.GetUDPDstPort();
-		::KTrace("Net: Adding UDP handler for port %d to %u.%u.%u.%u\n", 
+		KPrintf("Net: Adding UDP handler for port %d to %u.%u.%u.%u\n", 
 			   theirPort,
 			   (unsigned int)((theirIP>>24)&0xff), 
 			   (unsigned int)((theirIP>>16)&0xff), 
@@ -1026,7 +1024,7 @@ public:
 				recvfrom(mSocket, (char*)buf, sizeof(buf), 0, (struct sockaddr*)&theirSockAddr, &addrLen);
 			if (avail<1) {
 				if ( --mExpire == 0 ) {
-					::KTrace("Net: Timer expired. Removing UDP handler for port %u to %u.%u.%u.%u\n",
+					KPrintf("Net: Timer expired. Removing UDP handler for port %u to %u.%u.%u.%u\n",
 						   theirPort,
 						   (unsigned int)((theirIP>>24)&0xff),
 						   (unsigned int)((theirIP>>16)&0xff),
@@ -1037,7 +1035,7 @@ public:
 				}
 				return;
 			}
-			::KTrace("Net: W>E N Data %d bytes (UDP)\n", (int) avail);
+			KPrintf("Net: W>E N Data %d bytes (UDP)\n", (int) avail);
 			Packet *reply = NewPacket(avail);
 			memcpy(reply->GetUDPPayloadStart(), buf, avail);
 			UpdateChecksums(reply);
@@ -1140,7 +1138,7 @@ public:
 		reply->LogPayload(net->GetLog(), "W E>N");
 		net->Enqueue(reply);
 		KUInt32 theirIP = packet.GetARPTPA();
-		::KTrace("Net: ARP request for IP %u.%u.%u.%u\n",
+		KPrintf("Net: ARP request for IP %u.%u.%u.%u\n",
 			   (unsigned int)((theirIP>>24)&0xff),
 			   (unsigned int)((theirIP>>16)&0xff),
 			   (unsigned int)((theirIP>>8)&0xff),
@@ -1206,7 +1204,7 @@ public:
 	{
 //		char buf[1024];
 //		GetPrimaryIp(buf, 1023);
-//		::KTrace("My primary IP seems to be %s\n", buf);
+//		KPrintf("My primary IP seems to be %s\n", buf);
 //		void GetPrimaryIp(char* buffer, size_t buflen)
 //		{
 //			assert(buflen >= 16);
@@ -1267,24 +1265,24 @@ public:
 		
 		switch (packet.Get8(0x011c)) {
 			case 1:
-				::KTrace("Newt->World DHCP Discover\n"); break;
+				KPrintf("Newt->World DHCP Discover\n"); break;
 			case 2:
-				::KTrace("Router -> Newt: DCHP Offer\n"); break;
+				KPrintf("Router -> Newt: DCHP Offer\n"); break;
 			case 3:
-				::KTrace("Newt->World DHCP Request\n"); break;
+				KPrintf("Newt->World DHCP Request\n"); break;
 			case 5:
-				::KTrace("Router -> Newt: DHCP ACK\n"); break;
-			default: ::KTrace("UNKNOWN BOOT TYPE: %d\n", packet.Get8(0x011c)); break;
+				KPrintf("Router -> Newt: DHCP ACK\n"); break;
+			default: KPrintf("UNKNOWN BOOT TYPE: %d\n", packet.Get8(0x011c)); break;
 		}
 		
-		::KTrace("Net: DHCP request (%u bytes)\n", (unsigned int)packet.Size());
+		KPrintf("Net: DHCP request (%u bytes)\n", (unsigned int)packet.Size());
 		int i;
 		for (i=0; i<packet.Size(); i++) {
 			KUInt8 d = packet.Data()[i];
-			::KTrace("0x%02x, ", d);
-			if ((i&15)==15) ::KTrace("\n");
+			KPrintf("0x%02x, ", d);
+			if ((i&15)==15) KPrintf("\n");
 		}
-		::KTrace("\n");
+		KPrintf("\n");
 		
 		// Create a DHCP offer from the DHCP Discover packet
 		
@@ -1395,25 +1393,25 @@ public:
 //		// DHCP end option:
 //		*d++ = 0xff;
 //		if ( d>=reply->Data()+reply->Size())
-//			::KTrace("ERRROR: reply package too short\n");
+//			KPrintf("ERRROR: reply package too short\n");
 //		
 		if (packet.Get8(0x011c)==3)
 			reply->Set8(0x011c, 5); // ACK
 		
-		::KTrace("Net: DHCP checksums %04X %04X\n", reply->GetIPChecksum(), reply->GetUDPChecksum());
+		KPrintf("Net: DHCP checksums %04X %04X\n", reply->GetIPChecksum(), reply->GetUDPChecksum());
 		net->SetIPv4Checksum(reply->Data(), reply->Size());
 		net->SetUDPChecksum(reply->Data(), reply->Size());
-		::KTrace("Net: DHCP checksums %04X %04X\n", reply->GetIPChecksum(), reply->GetUDPChecksum());
+		KPrintf("Net: DHCP checksums %04X %04X\n", reply->GetIPChecksum(), reply->GetUDPChecksum());
 		
 		net->Enqueue(reply);
 
-		::KTrace("Net: DHCP reply (%u bytes)\n", (unsigned int)reply->Size());
+		KPrintf("Net: DHCP reply (%u bytes)\n", (unsigned int)reply->Size());
 		for (i=0; i<reply->Size(); i++) {
 			KUInt8 d = reply->Data()[i];
-			::KTrace("%02x %c  ", d, ((d>=32)&&(d<127))?d:'.');
-			if ((i&15)==15) ::KTrace("\n");
+			KPrintf("%02x %c  ", d, ((d>=32)&&(d<127))?d:'.');
+			if ((i&15)==15) KPrintf("\n");
 		}
-		::KTrace("\n");
+		KPrintf("\n");
 
 		/* Newton DHCP capture:
 
@@ -1640,10 +1638,10 @@ int TUsermodeNetwork::SendPacket(KUInt8 *data, KUInt32 size)
 	}
 
 	// if we can't interprete the package, we offer some debugging information
-	::KTrace("Net: Send Packet - I can't handle this packet:\n");
+	KPrintf("Net: Send Packet - I can't handle this packet:\n");
 //    int ss = size>70 ? 70 : size;
-//    for (int i=0; i<ss; i++) ::KTrace("%02x ", data[i]);
-//    ::KTrace("\n");
+//    for (int i=0; i<ss; i++) KPrintf("%02x ", data[i]);
+//    KPrintf("\n");
 
 	if (mLog) {
 		mLog->LogLine("\nTUsermodeNetwork: Newton is sending an unsupported package:");
@@ -1710,10 +1708,10 @@ KUInt32 TUsermodeNetwork::DataAvailable()
  */
 int TUsermodeNetwork::ReceiveData(KUInt8 *data, KUInt32 size)
 {
-    ::KTrace("NET: | Driver collects %d bytes\n", size);
+    KPrintf("NET: | Driver collects %d bytes\n", size);
 	Packet *pkt = mLastPacket;
 	if (pkt) {
-        ::KTrace("NET: +- Packet with %d bytes available\n", size);
+        KPrintf("NET: +- Packet with %d bytes available\n", size);
 		//assert(pkt->Size()==size); // FIXME: what do we do if it is not the same?
 		// copy the data over
 		memcpy(data, pkt->Data(), size);
@@ -1721,7 +1719,7 @@ int TUsermodeNetwork::ReceiveData(KUInt8 *data, KUInt32 size)
 		DropPacket();
 		return 0;
 	} else {
-        ::KTrace("NET: +- ERROR: NO PACKET AVAILABLE\n", size);
+        KPrintf("NET: +- ERROR: NO PACKET AVAILABLE\n", size);
 		return -1;
 	}
 }

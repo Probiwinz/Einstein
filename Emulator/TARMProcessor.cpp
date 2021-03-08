@@ -32,7 +32,6 @@
 #endif
 
 // K
-#include <K/Trace.h>
 #include <K/Streams/TStream.h>
 
 // Einstein
@@ -534,7 +533,7 @@ void
 TARMProcessor::DataAbort( void )
 {
 #if 0
-	::KTrace("Data Abort at 0x%08lx, accessing 0x%08lx\n", mCurrentRegisters[kR15]-8, mMemory->GetFaultAddressRegister());
+	KPrintf("Data Abort at 0x%08lx, accessing 0x%08lx\n", mCurrentRegisters[kR15]-8, mMemory->GetFaultAddressRegister());
 	FILE *f = fopen("/Users/matt/dev/Einstein/mmu.txt", "wb");
 	mMemory->FDump(f);
 	fclose(f);
@@ -923,7 +922,7 @@ TARMProcessor::BackupBankRegisters( void )
 void
 TARMProcessor::ResetInterrupt( void )
 {
-	::KTrace( "Reset Interrupt (Rebooting!)\n" );
+	KPrintf( "Reset Interrupt (Rebooting!)\n" );
 	mPendingInterrupts |= kResetInterrupt;
 }
 

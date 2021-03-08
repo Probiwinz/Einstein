@@ -33,7 +33,6 @@
 #endif
 
 // K
-#include <K/Trace.h>
 #include <K/Streams/TStream.h>
 
 // Einstein
@@ -892,7 +891,7 @@ TNativePrimitives::ExecutePlatformDriverNative( KUInt32 inInstruction )
 				char theLine[512];
 				KUInt32 amount = sizeof(theLine);
 				(void)mMemory->FastReadString(theAddress, &amount, theLine);
-				::KTrace("Log: %s\n", theLine);
+				KPrintf("Log: %s\n", theLine);
 			}
 		}
 			break;

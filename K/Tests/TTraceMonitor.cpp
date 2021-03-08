@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
 // ------------------------------------------------------------------------- //
 //  * TTraceMonitor( unsigned int )
 // ------------------------------------------------------------------------- //
@@ -196,6 +197,7 @@ TTraceMonitor::DoPrintStack(
 	// Affichage du nom de fichier et de la ligne
 	(void) ::printf( "> %s:%i\n", inFileName, inLineNumber );
 }
+
 
 // ====================================================================== //
 // Nurse Donna:    Oh, Groucho, I'm afraid I'm gonna wind up an old maid. //

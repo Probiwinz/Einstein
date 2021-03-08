@@ -171,7 +171,6 @@ Developer's Documentation: Basic Ideas, Basic Features, Detailed Class Reference
  */
 
 #include <K/Defines/KDefinitions.h>
-#include <K/Trace.h>
 
 #include "TFLApp.h"
 #include "TFLAppUI.h"
@@ -312,8 +311,8 @@ TFLApp::Run( int argc, char* argv[] )
     int ramSize = mFLSettings->RAMSize;
     Boolean hidemouse = (Boolean)mFLSettings->hideMouse;
 
-    ::KTrace( "Welcome to Einstein console.\n" );
-    ::KTrace( "This is %s.\n", VERSION_STRING );
+    KPrintf( "Welcome to Einstein console.\n" );
+    KPrintf( "This is %s.\n", VERSION_STRING );
 
     static char theROMImagePath[FL_PATH_MAX];
 
@@ -973,7 +972,7 @@ void TFLApp::InitMonitor(const char *theROMImagePath)
     fl_filename_setext(theSymbolListPath, FL_PATH_MAX, ".symbols");
     mSymbolList = new TSymbolList(theSymbolListPath);
     mMonitor = new TFLMonitor((TBufferLog*)mLog, mEmulator, mSymbolList, theROMImagePath);
-    ::KTrace("Booting... (Monitor enabled)\n");
+    KPrintf("Booting... (Monitor enabled)\n");
 }
 
 
@@ -1002,7 +1001,7 @@ TFLApp::CreateLog( const char* inFilePath )
 {
     if (mLog)
     {
-        ::KTrace( "A log already exists (--monitor & --log are exclusive)\n" );
+        KPrintf( "A log already exists (--monitor & --log are exclusive)\n" );
         ::exit(1);
     }
     mLog = new TFileLog( inFilePath );
@@ -1161,7 +1160,7 @@ T_ROM_INJECTION(0x001B37FC, 0x001B5CD4, 0x001A1660, "AddClipboard__9TRootViewFRC
 
 static void clip_callback(int source, void *data) {
     if ( source == 1 ) {
-        ::KTrace("Clipboard: \"%s\"\n", (char*)data);
+        KPrintf("Clipboard: \"%s\"\n", (char*)data);
     }
 }
 
