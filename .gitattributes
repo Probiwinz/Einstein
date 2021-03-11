@@ -1,6 +1,8 @@
 # Set the default behaviour, in case people don't have core.autocrlf set.
 * text=auto
 
+Resources/MSWindows/* binary
+
 # Explicitly declare the text files you want to always be normalised and converted
 # to native line endings on checkout.
 *.cs text
