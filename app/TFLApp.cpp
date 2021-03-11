@@ -1114,7 +1114,7 @@ void TFLApp::StoreAppWindowSize()
 // If Cmd-P is pressed, called from DoEditCommand__5TViewFl (arg=2 or 3) (009EA00), "FClipboardCommand(arg)"
 T_ROM_INJECTION(0x001B37FC, 0x001B5CD4, 0x001A1660, "AddClipboard__9TRootViewFRC6RefVarT1")
 {
-//    fprintf(stderr, "AddClipboard__9TRootViewFRC6RefVarT1\n");
+//    KPrintf("AddClipboard__9TRootViewFRC6RefVarT1\n");
     // TRootView::AddClipboard(RefVar const &, RefVar const &): 0x01ABEF3C 
     // r0 is a pointer to TRootView
     // r1 is the clipboard data

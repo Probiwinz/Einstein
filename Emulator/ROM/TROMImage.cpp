@@ -384,7 +384,7 @@ KSInt32 TROMImage::ComputeROMId(KUInt8 *inROMPtr)
             romID = kMP2x00DROM;
             break;
         default:
-            fprintf(stderr, "Unknown ROM with CRC 0x%08x. No patches will be applied.\n", crc);
+            KPrintf("Unknown ROM with CRC 0x%08x. No patches will be applied.\n", crc);
             break;
     }
     return romID;

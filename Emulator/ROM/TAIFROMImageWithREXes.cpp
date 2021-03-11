@@ -31,14 +31,13 @@
 #include <stdlib.h>
 
 #if TARGET_OS_WIN32
-#include <Windows.h>
-//#include "CompatibilityWin32.h"
-#include <io.h>
-#define PATH_MAX MAX_PATH
+	#include <Windows.h>
+	#include <io.h>
+	#define PATH_MAX MAX_PATH
 #else
-#include <sys/uio.h>
-#include <unistd.h>
-#include <sys/param.h>
+	#include <sys/uio.h>
+	#include <unistd.h>
+	#include <sys/param.h>
 #endif
 
 // K
@@ -81,7 +80,7 @@ TAIFROMImageWithREXes::TAIFROMImageWithREXes(const char* inAIFPath,
     if (inREX1Path) {
         // get the date when the REX file was last modified
         if (GetLatestModDate(&theModDate, inREX1Path) < 0) {
-            (void) ::fprintf(stderr, "Can't stat REX1 file (%s)\n", inREX1Path);
+            KPrintf("Can't stat REX1 file (%s)\n", inREX1Path);
             mErrorCode = kErrorLoadingEinsteinREXFile;
             return;
         }
@@ -177,7 +176,7 @@ TAIFROMImageWithREXes::TAIFROMImageWithREXes(const char* inAIFPath,
         fd = ::open(inREX1Path, O_RDONLY, 0);
 #endif
         if (fd < 0) {
-            (void) ::fprintf(stderr, "Can't open REX 1 file '%s'\n", inREX1Path);
+            KPrintf("Can't open REX 1 file '%s'\n", inREX1Path);
             ::free(theData);
             mErrorCode = kErrorLoadingEinsteinREXFile;
             return;

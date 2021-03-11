@@ -227,7 +227,7 @@ TEmulator::Run( void )
 	
 	mInterruptManager->SuspendTimer();
 
-    // FIXME: The code below is harmful when we call the emulator through the monitor!
+    // FIXME: The code below may be harmful when we call the emulator through the monitor!
     // Instead, the caller of this function, or of TMonitor::run() should call the Quir function.
 	if (mCallOnQuit)
 	    mCallOnQuit();
@@ -438,7 +438,7 @@ TEmulator::TapFileCntlUND( KUInt32 inPAddr )
 			
 			// Unhandled :(
 			else {
-				fprintf(stderr, "unknown TapFileCntl command: 0x%02x\n", (unsigned)command);
+				KPrintf("unknown TapFileCntl command: 0x%02x\n", (unsigned)command);
 				BreakInMonitor();
 				result = -1;
 			}
@@ -494,17 +494,17 @@ TEmulator::LoadState( const char* inPath )
 	TStream* theStream = new TFileStream( inPath, "rb" );
 	id = theStream->GetInt32BE();
 	if (id!='EINI') {
-		fprintf(stderr, "This is not a file created by Einstein!\n");
+		KPrintf("This is not a file created by Einstein!\n");
 		return;
 	}
 	type = theStream->GetInt32BE();
 	if (type!='SNAP') {
-		fprintf(stderr, "This is not an Einstein State file!\n");
+		KPrintf("This is not an Einstein State file!\n");
 		return;
 	}
 	theStream->Version(theStream->GetInt32BE());
 	if (theStream->Version()!=1) {
-		fprintf(stderr, "This Einstein State file is not supported. Please upgarde your Einstein version.\n");
+		KPrintf("This Einstein State file is not supported. Please upgarde your Einstein version.\n");
 		return;
 	}
 	TransferState( theStream );

@@ -311,7 +311,7 @@ public:
 
  \code
  T_ROM_INJECTION(0x00000010, 0x00000010, 0x00000010, "Data Abort") {
-     fprintf(stderr, "DATA ABORT called from 0x%08X\n", ioCPU->mR14abt_Bkup-8);
+     KPrintf("DATA ABORT called from 0x%08X\n", ioCPU->mR14abt_Bkup-8);
      return ioUnit;
  }
  \endcode

@@ -85,7 +85,7 @@ JITInstructionProto(CallPatchNative)
 	POPVALUE(patchIndex);
 	TJITGenericPatchObject *patch = TJITGenericPatchManager::GetPatchAt(patchIndex);
 	if (!patch) {
-		fprintf(stderr, "ERROR in %s %d: no patch found for index %d\n",
+		KPrintf("ERROR in %s %d: no patch found for index %d\n",
 				__FILE__, __LINE__, (int)patchIndex);
 		CALLNEXTUNIT; // returns from this function
 	}

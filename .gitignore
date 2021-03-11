@@ -31,7 +31,6 @@ DerivedData/
 /cmake_build_*/
 *.iml
 /CMakeSettings.json
-/app/._TFLSettings.fl
 /app/Version.h
 /app/TFLAppUI.cpp
 /app/TFLAppUI.h
@@ -39,18 +38,4 @@ DerivedData/
 /app/TFLSettingsUI.h
 /Toolkit/TFLToolkitUI.cpp
 /Toolkit/TFLToolkitUI.h
-/CMakeSettings.json
-
-/Emulator/PCMCIA/FlashDump.h
-/Emulator/PCMCIA/FlashDump.cpp
-/Emulator/PCMCIA/FlashCIS.h
-/Emulator/PCMCIA/FlashCIS.cpp
-/Emulator/PCMCIA/DiagCard.h
-/Emulator/PCMCIA/DiagCard.cpp
-/Emulator/PCMCIA/DiagCard
-/Emulator/PCMCIA/DiagCard.fl
-/Drivers/packages/MemDumper/ROMDumper.short.nscript
-/Drivers/packages/MemDumper/ROMDumper.reversed.nscript
-/Drivers/packages/MemDumper/ROMDumper.pkg
-/Drivers/packages/MemDumper/ROMDumper.nscript
-/Drivers/packages/MemDumper/desktop.ini
+/Drivers/packages/MemDumper

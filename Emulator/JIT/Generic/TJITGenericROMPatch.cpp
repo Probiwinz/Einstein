@@ -40,29 +40,6 @@
 
 
 /*
- * This ROM injection creates a boot progress indicator.
- * Furter updates are displayed whenever NewtonOS jumps into native driver
- * functions.
- *
- * \note This patch is disabled because the boot process is now fast enough,
- *      and there is no visual indication needed anymore.
- *
- * \see TNativePrimitives::ExecuteNative(KUInt32 inInstruction)
- */
-//T_ROM_INJECTION(0x00018688, kROMPatchVoid, kROMPatchVoid,
-//                "Progress_ROMBoot")
-//{
-//	TScreenManager *screen = ioCPU->GetEmulator()->GetScreenManager();
-//	if (screen->OverlayIsOn()) {
-//		screen->OverlayPrintProgress(1, 2);
-//		screen->OverlayPrintAt(0, 3, "ROMBoot", 1);
-//		screen->OverlayFlush();
-//	}
-//	return ioUnit;
-//}
-
-
-/*
  * Avoid calibration screen early in the game.
  * This patch changes a branch instruction in CheckTabletCalibration(void).
  */
@@ -120,7 +97,7 @@ TJITGenericPatchObject *TJITGenericPatchManager::GetPatchAt(KUInt32 ix)
 	if (ix<mPatchListTop) {
 		return mPatchList[ix];
 	} else {
-//		fprintf(stderr, "ERROR in %s %d: accessing invalid patch index %d of %d\n",
+//		KPrintf("ERROR in %s %d: accessing invalid patch index %d of %d\n",
 //				__FILE__, __LINE__, (int)ix, (int)mPatchListTop);
 		return NULL;
 	}
@@ -162,7 +139,7 @@ void TJITGenericPatchManager::DoPatchROM(KUInt32* inROMPtr, KSInt32 inROMId)
 		for (KUInt32 i=0; i<mPatchListTop; i++) {
 			mPatchList[i]->Apply(inROMPtr, inROMId);
 		}
-		fprintf(stderr, "%u patches applied\n", (unsigned)GetNumPatches());
+		KPrintf("%u patches applied\n", (unsigned)GetNumPatches());
 	}
 }
 
@@ -186,7 +163,7 @@ TJITGenericPatchObject::TJITGenericPatchObject(KUInt32 inAddr0, KUInt32 inAddr1,
 	assert(inAddr0 == kROMPatchVoid || inAddr0 < 16 * 1024 * 1024);
 	assert(inAddr1 == kROMPatchVoid || inAddr1 < 16 * 1024 * 1024);
 	assert(inAddr2 == kROMPatchVoid || inAddr2 < 16 * 1024 * 1024);
-	//    fprintf(stderr, "Adding ROM patch: %s\n", name);
+	//    KPrintf("Adding ROM patch: %s\n", name);
 }
 
 
@@ -214,13 +191,13 @@ KUInt32 TJITGenericPatchObject::GetOffsetInROM(KSInt32 inROMId)
         return kROMPatchVoid;
 
     if (address>=TMemoryConsts::kHighROMEnd) {
-        fprintf(stderr, "ERROR in %s %d: patch address not in ROM at 0x%08X in patch '%s'\n",
+        KPrintf("ERROR in %s %d: patch address not in ROM at 0x%08X in patch '%s'\n",
                 __FILE__, __LINE__, (unsigned)address, mName?mName:"(unnamed)");
         return kROMPatchVoid;
     }
 
     if (address&0x00000003) {
-        fprintf(stderr, "ERROR in %s %d: patch address not word-aligned at 0x%08X in patch '%s'\n",
+        KPrintf("ERROR in %s %d: patch address not word-aligned at 0x%08X in patch '%s'\n",
                 __FILE__, __LINE__, (unsigned)address, mName?mName:"(unnamed)");
         return kROMPatchVoid;
     }
@@ -303,7 +280,7 @@ void TJITGenericPatchFindAndReplace::Apply(KUInt32 *ROM, KSInt32 inROMId)
 
     KUInt32 keyLen = mKey[0];
     if (memcmp(ROM+offset, mKey+1, keyLen*4)!=0) {
-        fprintf(stderr, "WARNING in %s %d: Key pattern does not match, patch \"%s\" not applied.\n",
+        KPrintf("WARNING in %s %d: Key pattern does not match, patch \"%s\" not applied.\n",
                 __FILE__, __LINE__, GetName());
         return;
     }
@@ -406,13 +383,13 @@ JITInstructionProto(CallHostInjection)
 				if (TSymbolList::List) {
 					symbol = (char*)::malloc(1024);
 					TSymbolList::List->GetNearestSymbolByAddress(pc, symbol, 0L, &offset);
-					fprintf(stderr, "SIM_INFO[%u]: %s caught at 0x%08X, lr=0x%08X (pcAbort=0x%08X)\n",
+					KPrintf("SIM_INFO[%u]: %s caught at 0x%08X, lr=0x%08X (pcAbort=0x%08X)\n",
 							(unsigned int)errCnt++, err, (unsigned int)pc, (unsigned int)ioCPU->GetRegister(14)-4, (unsigned int)ioCPU->mR14abt_Bkup);
 					if (symbol) {
 						if (offset) {
-							fprintf(stderr, "SIM_INFO: ... at %s%+d\n", symbol, offset);
+							KPrintf("SIM_INFO: ... at %s%+d\n", symbol, offset);
 						} else {
-							fprintf(stderr, "SIM_INFO: ... at %s\n", symbol);
+							KPrintf("SIM_INFO: ... at %s\n", symbol);
 						}
 						::free(symbol);
 					}

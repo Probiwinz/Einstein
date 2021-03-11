@@ -348,11 +348,7 @@ TPCMCIAController::InsertCard( TPCMCIACard* inCard )
 	// Init the card.
 	mCard->Init( this );
 	
-	// 
-	// 0x000C 
 	RaiseInterrupt(kSocketCardDetectedIntVector);
-	// Port 0: 0x0004 and/or 0x0008
-	//RaiseInterrupt(0x0010);
 }
 
 // -------------------------------------------------------------------------- //

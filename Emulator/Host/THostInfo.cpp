@@ -40,7 +40,6 @@
 
 #if TARGET_OS_WIN32
 	#include <windows.h>
-//	#include "CompatibilityWin32.h"
 	#include <time.h>
 #else
 	#include <unistd.h>
@@ -264,6 +263,7 @@ THostInfo::RetrieveUserInfo( void )
 #if TARGET_OS_OPENSTEP
 #ifdef TARGET_IOS
 #else
+#ifndef NO_USER_PERMISSION
 		// On MacOS X, I try:
 		// - The AddressBook
 		// - Carbon access to the full name
@@ -467,7 +467,8 @@ THostInfo::RetrieveUserInfo( void )
 			
 			break;
 		}
-
+#endif
+    // NO_USER_PERMISSION
 #endif
 #endif
 

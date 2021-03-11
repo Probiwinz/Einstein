@@ -33,7 +33,6 @@
 #if TARGET_OS_WIN32
 #include <Windows.h>
 #define PATH_MAX MAX_PATH
-//    #include "CompatibilityWin32.h"
 #include <io.h>
 #else
 #include <sys/uio.h>
@@ -83,7 +82,7 @@ TFlatROMImageWithREX::TFlatROMImageWithREX(
     if (inREXPath) {
         // get the date when the REX file was last modified
         if (GetLatestModDate(&theModTime, inREXPath) < 0) {
-            (void) ::fprintf(stderr, "Can't stat Einstein REX file (%s)\n", inREXPath);
+            KPrintf("Can't stat Einstein REX file (%s)\n", inREXPath);
             mErrorCode = kErrorLoadingEinsteinREXFile;
             return;
         }
@@ -138,7 +137,7 @@ TFlatROMImageWithREX::TFlatROMImageWithREX(
 #endif
         if (fd < 0) {
             ::free(theData);
-            ::fprintf(stderr, "Can't open Einstein REX file '%s'\n", inREXPath);
+            KPrintf("Can't open Einstein REX file '%s'\n", inREXPath);
             mErrorCode = kErrorLoadingEinsteinREXFile;
             return;
         }

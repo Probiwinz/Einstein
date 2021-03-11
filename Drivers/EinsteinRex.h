@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     const char *fname = argv[1];
     FILE *fp = fopen(fname, "rb");
     if (!fp) {
-        fprintf(stderr, "Error opening file: %s.\n", fname);
+        KPrintf("Error opening file: %s.\n", fname);
         return 1;
     }
 
