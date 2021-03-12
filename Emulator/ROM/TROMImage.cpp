@@ -39,11 +39,6 @@
 	#include <unistd.h>
 #endif
 
-// FLTK (only filename handling, can be removed)
-#if TARGET_UI_FLTK
-#include <FL/filename.H>
-#endif
-
 // K
 #include <K/Misc/TMappedFile.h>
 #include <K/Defines/UByteSex.h>
@@ -334,6 +329,9 @@ TROMImage::LookForREXes(
 								(unsigned int) rexCursor);
 					::abort();
 				}
+				// Patch the REx to have a sequential ID, or NewtonOS will
+				// be very confused an erase the user's Flash image.
+				swappedROM[(rexCursor / 4) + 7] = nbRexes;
 				
 				outRexBases[nbRexes] = rexCursor;
 				outRexSizes[nbRexes++] = theRexSize;
@@ -398,7 +396,12 @@ KSInt32 TROMImage::ComputeROMId(KUInt8 *inROMPtr)
 static int strcasecmp(const char *a, const char *b) { return stricmp(a, b); }
 #endif
 
-#if !TARGET_UI_FLTK
+#if TARGET_UI_FLTK
+
+# include <FL/filename.H>
+
+#else
+
 #define FL_PATH_MAX PATH_MAX
 const char *fl_filename_name(const char *path)
 {

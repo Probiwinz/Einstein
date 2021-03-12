@@ -49,8 +49,7 @@ public:
 	/// \param inMachineString	machine string.
 	///
 	TFlatROMImageWithREX(const char* inROMPath,
-                         const char* inREXPath,
-                         const char *inImagePath = 0);
+					const char* inREXPath);
 
 	///
 	/// Destructor.

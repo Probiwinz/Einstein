@@ -178,7 +178,6 @@ private:
 	///
 	TROMImage& operator = ( const TROMImage& inCopy ) = delete;
 	
-	TMappedFile*	mMappedFile;	///< mapped file with the rom.
 	SImage*			mImage; 		///< image structure.
 
     KSInt32         mROMId = kUnknownROM;

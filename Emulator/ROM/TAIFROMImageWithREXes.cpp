@@ -45,7 +45,9 @@
 
 // Einstein
 #include "TAIFFile.h"
+#if TARGET_UI_FLTK
 #include "Drivers/EinsteinRex.h"
+#endif
 #include "app/Version.h"
 
 // -------------------------------------------------------------------------- //
@@ -166,8 +168,15 @@ TAIFROMImageWithREXes::TAIFROMImageWithREXes(const char* inAIFPath,
 
     // Read second rex.
     if (inREX1Path==nullptr) {
+#if TARGET_UI_FLTK
         // use the builtin Einstein.rex
         memcpy(theData+0x00800000, Einstein_rex, Einstein_rex_len);
+#else
+		// TODO: we can find the Rex in the MacOS .app resources
+		::free(theData);
+		mErrorCode = kErrorLoadingEinsteinREXFile;
+		return;
+#endif
     } else {
         // load the Einstein.rex from a file
 #if TARGET_OS_WIN32
