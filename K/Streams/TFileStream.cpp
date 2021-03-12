@@ -102,7 +102,9 @@ TFileStream::TFileStream( FILE* inFile )
 		mWeOpenedTheFile( false )
 {
 #if TARGET_OS_WIN32
-	mIsWriting = mIsReading = 1; // FIXME: actually, we have no clue
+	mIsWriting = mIsReading = 1; 
+	// Windows does not have a standard API for getting this value
+	// see: NtQueryInformationFile
 #else
 	int fileflags = fcntl (fileno(inFile), F_GETFL, 0);
 	if (fileflags!=-1) {
