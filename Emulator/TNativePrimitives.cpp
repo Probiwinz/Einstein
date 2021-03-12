@@ -36,7 +36,6 @@
 #include <K/Streams/TStream.h>
 
 // Einstein
-#include "app/TFLApp.h"
 #include "Emulator/Log/TLog.h"
 #include "Emulator/TEmulator.h"
 #include "Emulator/TMemory.h"
@@ -54,10 +53,12 @@
 #if TARGET_OS_MAC
 #include "Emulator/NativeCalls/TObjCBridgeCalls.h"
 #endif
-#include "Toolkit/TToolkit.h"
 
-// FLTK
-#include <FL/fl_utf8.h>
+#ifdef TARGET_UI_FLTK
+# include "app/TFLApp.h"
+# include "Toolkit/TToolkit.h"
+# include <FL/fl_utf8.h>
+#endif
 
 // Native primitives implement stores to coprocessor #10
 
@@ -856,16 +857,12 @@ TNativePrimitives::ExecutePlatformDriverNative( KUInt32 inInstruction )
 		case 0x1A:
 			// Log
 		{
+#ifdef TARGET_UI_FLTK
 			KUInt32 theAddress = mProcessor->GetRegister(1);
 			char theLine[512];
 			KUInt32 amount = sizeof(theLine);
 			(void)mMemory->FastReadString(theAddress, &amount, theLine);
 			// theLine is encoded in ISO format
-
-#if TARGET_OS_WIN32
-			// output directly to the VisualC debuggging output window
-			OutputDebugString(theLine);
-#endif
 			// if the Toolkit is available, send the text to the monitor
 			if (gToolkit) {
 				unsigned srcLen = strlen(theLine);
@@ -877,8 +874,11 @@ TNativePrimitives::ExecutePlatformDriverNative( KUInt32 inInstruction )
 				gToolkit->PrintStd(dstText);
 				free(dstText);
 				//gToolkit->PrintStd("\n");
-			}
-
+			} else {
+				// output directly to the debuggging console
+			    KPrintf("%s", theLine);
+            }
+#endif
 			// this is older code, dealing with logs and stdout
 			// should we convert the output text into another encoding?
 			if (mLog)
