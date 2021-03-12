@@ -40,9 +40,6 @@
 #include <K/Unicode/UUTF16CStr.h>
 #include <K/Threads/TMutex.h>
 
-// FLTK
-#include <FL/fl_utf8.h>
-
 // Einstein
 #include "Emulator/TInterruptManager.h"
 #include "Emulator/TMemory.h"
@@ -344,6 +341,29 @@ TPlatformManager::SendAEvent( EPort inPortId, KUInt32 inSize, const KUInt8* inDa
 	mMutex->Unlock();
 }
 
+// -------------------------------------------------------------------------- //
+//  * SendNetworkCardEvent( void )
+// -------------------------------------------------------------------------- //
+void
+TPlatformManager::SendNetworkCardEvent( void )
+{
+	static TNE2000Card *theCard = NULL;
+
+	// FIXME: Change check mark in Menu.
+	if (mMemory) {
+		TPCMCIAController *theController = mMemory->GetPCMCIAController(0);
+		if (theController) {
+			if (theCard==0L) {
+				theCard = new TNE2000Card();
+				theController->InsertCard(theCard);
+			} else {
+				theController->RemoveCard();
+				theCard = NULL;
+			}
+		}
+	}
+}
+
 /**
  * Insert or replace a PCCard in a given slot, or remove a PCCard
  */
@@ -593,29 +613,35 @@ TPlatformManager::SendBufferAEvent(
 void
 TPlatformManager::EvalNewtonScript(const char* inNewtonScriptCode)
 {
-	unsigned srcLen = strlen(inNewtonScriptCode);
-	unsigned dstLen = fl_utf8toa(inNewtonScriptCode, srcLen, nullptr, 0);
+#ifdef TARGET_UI_FLTK
+	size_t srcLen = UUTF16CStr::StrLen((KUInt8*)inNewtonScriptCode);
+	size_t dstLen = 0;
 
-	if (srcLen == dstLen) {
-		SendBufferAEvent(
-			kNewtPort,
-			kEinsteinNSEventClass,
-			kEventRuntimeWithSData,
-			kNewtonScriptEvalData,
-			(KUInt32) ::strlen(inNewtonScriptCode),
-			(const KUInt8*)inNewtonScriptCode);
-	} else {
-		char* dstScript = (char*)::malloc(dstLen + 1);
-		fl_utf8toa(inNewtonScriptCode, srcLen, dstScript, dstLen+1);
-		SendBufferAEvent(
-			kNewtPort,
-			kEinsteinNSEventClass,
-			kEventRuntimeWithSData,
-			kNewtonScriptEvalData,
-			(KUInt32)dstLen,
-			(const KUInt8*)dstScript);
-		free(dstScript);
-	}
+	KUInt16* utf16buf = (KUInt16*)malloc((srcLen + 1) * sizeof(KUInt16));
+	KUInt8* macBuf = (KUInt8*)malloc(srcLen+1);
+
+	UUTF16CStr::FromUTF8((KUInt8*)inNewtonScriptCode, utf16buf, srcLen + 1);
+	UUTF16CStr::ToISO88591(utf16buf, macBuf, srcLen+1, &dstLen);
+
+	SendBufferAEvent(
+		kNewtPort,
+		kEinsteinNSEventClass,
+		kEventRuntimeWithSData,
+		kNewtonScriptEvalData,
+		(KUInt32)dstLen,
+		(const KUInt8*)macBuf);
+
+	free(utf16buf);
+	free(macBuf);
+#else
+	SendBufferAEvent(
+		kNewtPort,
+		kEinsteinNSEventClass,
+		kEventRuntimeWithSData,
+		kNewtonScriptEvalData,
+		(KUInt32) ::strlen(inNewtonScriptCode),
+		(const KUInt8*)inNewtonScriptCode);
+#endif
 }
 
 // -------------------------------------------------------------------------- //

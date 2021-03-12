@@ -182,6 +182,11 @@ public:
 	void	SendAEvent( EPort inPortId, KUInt32 inSize, const KUInt8* inData );
 
 	///
+	/// Send a Network card insertion event.
+	///
+	void	SendNetworkCardEvent( void );
+	
+	///
 	/// Insert or replace a PCCard in a given slot, or remove a PCCard
 	/// 
 	int	InsertPCCard(KUInt32 inSLot, TPCMCIACard* inCard);
