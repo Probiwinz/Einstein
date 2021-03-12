@@ -1708,10 +1708,10 @@ KUInt32 TUsermodeNetwork::DataAvailable()
  */
 int TUsermodeNetwork::ReceiveData(KUInt8 *data, KUInt32 size)
 {
-    KPrintf("NET: | Driver collects %d bytes\n", size);
+    // KPrintf("NET: | Driver collects %d bytes\n", size);
 	Packet *pkt = mLastPacket;
 	if (pkt) {
-        KPrintf("NET: +- Packet with %d bytes available\n", size);
+        // KPrintf("NET: +- Packet with %d bytes available\n", size);
 		//assert(pkt->Size()==size); // FIXME: what do we do if it is not the same?
 		// copy the data over
 		memcpy(data, pkt->Data(), size);
@@ -1719,7 +1719,7 @@ int TUsermodeNetwork::ReceiveData(KUInt8 *data, KUInt32 size)
 		DropPacket();
 		return 0;
 	} else {
-        KPrintf("NET: +- ERROR: NO PACKET AVAILABLE\n", size);
+        // KPrintf("NET: +- ERROR: NO PACKET AVAILABLE\n", size);
 		return -1;
 	}
 }
