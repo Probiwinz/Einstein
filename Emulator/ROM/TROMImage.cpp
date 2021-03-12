@@ -380,10 +380,13 @@ KSInt32 TROMImage::ComputeROMId(KUInt8 *inROMPtr)
         case 0x62081e10: // eMate 300(US): v2.2.00-0(737041) can be updated to v2.1/737246
             romID = kEMate300ROM;
             break;
-        case 0xa9862ccc: // MP2100(D): (747129)  (747260)
-            romID = kMP2x00DROM;
-            break;
-        default:
+		case 0xa9862ccc: // MP2100(D): (747129)  (747260)
+			romID = kMP2x00DROM;
+			break;
+		case 0x00000000: // Watson: we do not know the checksum yet, and there may be multiple Watson ROMs out there!
+			romID = kWatsonROM;
+			break;
+		default:
             KPrintf("Unknown ROM with CRC 0x%08x. No patches will be applied.\n", crc);
             break;
     }

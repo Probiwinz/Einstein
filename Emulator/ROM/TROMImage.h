@@ -91,6 +91,7 @@ public:
     static const KSInt32 k717006 = 0;
     static const KSInt32 kMP2x00DROM = 1;
     static const KSInt32 kEMate300ROM = 2;
+	static const KSInt32 kWatsonROM 	=  3;
 
     static TROMImage *LoadROMAndREX(const char *theROMImagePath, Boolean useMonitor, Boolean useExternalERex);
 
