@@ -280,9 +280,12 @@ set ( sources
 	Monitor/UDisasm.h
 	app/TFLApp.cpp
 	app/TFLApp.h
+	app/TFLAppUI.fl
 	app/TFLAppUI.cpp
 	app/TFLAppUI.h
-	app/TFLAppUI.fl
+	app/TFLRexImage.fl
+	app/TFLRexImage.cpp
+	app/TFLRexImage.h
 	app/TFLSettingsUI.fl
 	app/TFLSettingsUI.cpp
 	app/TFLSettingsUI.h
@@ -296,8 +299,6 @@ set ( sources
 	app/TFLTabs.h
 	app/Version.h
 	app/Version.h.in
-	Drivers/EinsteinRex.cpp
-	Drivers/EinsteinRex.h
 )
 
 #
